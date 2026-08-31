@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- PROTOTYPE — throwaway. Screenshot harness for narrow widths.
+     Headless Chrome ignores --window-size below ~512px and lays out at 512, then crops the
+     PNG to the requested width, which looks exactly like a right-padding bug and is not one.
+     An iframe of an explicit width does lay out at that width, so screenshot this instead:
+       chrome --headless --hide-scrollbars --window-size=500,2600 \
+         --screenshot=out.png "http://127.0.0.1:8422/prototype/visual-form/render.html?w=390"
+     Then crop x 0..w. The frame is tall and scrolling="no" so no scrollbar steals width. -->
+<html lang="en">
+<head><meta charset="utf-8"><title>render</title>
+<style>html,body{margin:0;overflow:hidden;background:#fff}iframe{border:0;display:block}</style>
+</head>
+<body>
+<iframe id="f" src="variant-d.html" scrolling="no" height="2600"></iframe>
+<script>
+document.getElementById('f').style.width =
+  (new URLSearchParams(location.search).get('w') || 390) + 'px';
+</script>
+</body>
+</html>

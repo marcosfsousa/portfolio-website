@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!-- PROTOTYPE — throwaway harness. Measures variant D's real laid-out geometry in a real
+     browser, so alignment and measure claims are anchored on layout rather than on reading
+     the CSS. Run headless:
+       chrome --headless --disable-gpu --window-size=1440,900 --virtual-time-budget=4000 \
+         --dump-dom http://127.0.0.1:8422/prototype/visual-form/align-check.html
+     Same-origin over http:// is what lets the parent read into the frame. -->
+<html lang="en">
+<head><meta charset="utf-8"><title>align-check</title>
+<style>html,body{margin:0}iframe{height:900px;border:0}</style>
+</head>
+<body>
+<pre id="out">running</pre>
+<iframe id="f" src="variant-d.html"></iframe>
+<script>document.getElementById("f").style.width =
+  (new URLSearchParams(location.search).get("w") || 1440) + "px";</script>
+<script>
+function run() {
+  const d = document.getElementById('f').contentDocument;
+  const rows = [...d.querySelectorAll('.row')];
+  const lines = [];
+  lines.push('viewport ' + document.getElementById('f').clientWidth + 'px');
+  lines.push('');
+  lines.push('row            col.left  col.width  side.left  side.right');
+  let lefts = [];
+  for (const r of rows) {
+    const col = r.querySelector('.col');
+    const side = r.querySelector('.side');
+    const c = col.getBoundingClientRect();
+    const s = side ? side.getBoundingClientRect() : null;
+    const name = (side ? side.textContent.trim() : '(hero, no label)').padEnd(14);
+    lefts.push(c.left);
+    lines.push(name + String(Math.round(c.left)).padStart(8) +
+      String(Math.round(c.width)).padStart(11) +
+      (s ? String(Math.round(s.left)).padStart(11) + String(Math.round(s.right)).padStart(12) : '          -           -'));
+  }
+  lines.push('');
+  lines.push('row            row.left  row.width  computed grid-template-columns');
+  for (const r of rows) {
+    const side = r.querySelector('.side');
+    const rr = r.getBoundingClientRect();
+    const cs = getComputedStyle(r);
+    lines.push((side ? side.textContent.trim() : '(hero)').padEnd(14) +
+      String(Math.round(rr.left)).padStart(8) + String(Math.round(rr.width)).padStart(11) +
+      '  ' + cs.gridTemplateColumns);
+  }
+  lines.push('hero .col grid-column: ' +
+    getComputedStyle(rows[0].querySelector('.col')).gridColumnStart);
+
+  const drift = Math.max(...lefts) - Math.min(...lefts);
+  lines.push('');
+  lines.push('MAX COL.LEFT DRIFT: ' + drift.toFixed(1) + 'px  ' + (drift < 0.5 ? '(aligned)' : '(MISALIGNED)'));
+
+  // Vertical: where does the exhibit heading land, and what is the real measure?
+  const h2 = d.querySelector('h2');
+  const hr = h2.getBoundingClientRect();
+  lines.push('exhibit h2 top/bottom: ' + Math.round(hr.top) + ' / ' + Math.round(hr.bottom) + 'px');
+
+  // Lines, not rects: getClientRects() returns one rect per inline box, so links and <code>
+  // split a single line into several. Distinct rect tops is the line count.
+  const p = h2.nextElementSibling;
+  const range = d.createRange(); range.selectNodeContents(p);
+  const tops = new Set([...range.getClientRects()].map(r => Math.round(r.top)));
+  const chars = p.textContent.trim().length;
+  lines.push('first exhibit paragraph: ' + chars + ' chars over ' + tops.size + ' lines ('
+    + range.getClientRects().length + ' rects); naive avg ' + Math.round(chars / tops.size)
+    + ' chars/line -- biased low, the last line is partial');
+
+  // Unbiased: column width divided by the average character advance of this paragraph's
+  // own text, measured by the browser in the font it actually selected. Independent of
+  // where lines happen to break.
+  const cs = getComputedStyle(p);
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+  const sample = p.textContent.trim();
+  const avg = ctx.measureText(sample).width / sample.length;
+  const cpl = p.getBoundingClientRect().width / avg;
+  lines.push('MEASURE: col ' + Math.round(p.getBoundingClientRect().width) + 'px / avg advance '
+    + avg.toFixed(2) + 'px = ' + cpl.toFixed(1) + ' chars/line'
+    + (cpl >= 65 && cpl <= 75 ? '  [in 65-75]' : '  [OUT OF BAND]'));
+  // Not the used font: this is only the first name in the stack. The avg advance above
+  // is the evidence for which face actually rendered (cross-check measure-check.py).
+  lines.push('stack head (NOT proof of used face): ' + cs.fontFamily.split(',')[0]);
+
+  // Gap between the email line and the DEUTSCH row, and between DEUTSCH and EXHIBIT.
+  const de = rows.find(r => r.querySelector('.side') && /deutsch/i.test(r.querySelector('.side').textContent));
+  const ex = rows.find(r => r.querySelector('.side') && /exhibit/i.test(r.querySelector('.side').textContent));
+  const heroLast = rows[0].querySelector('.col').lastElementChild.getBoundingClientRect();
+  const deTop = de.querySelector('.col').firstElementChild.getBoundingClientRect();
+  const deBot = de.querySelector('.col').lastElementChild.getBoundingClientRect();
+  const exTop = ex.querySelector('.col').firstElementChild.getBoundingClientRect();
+  lines.push('gap email -> deutsch text : ' + Math.round(deTop.top - heroLast.bottom) + 'px');
+  lines.push('gap deutsch -> exhibit h2 : ' + Math.round(exTop.top - deBot.bottom) + 'px');
+
+  // --- Overflow, and the inline code spans that do not break. ---
+  lines.push('');
+  const root = d.documentElement;
+  lines.push('document scrollWidth/clientWidth: ' + root.scrollWidth + '/' + root.clientWidth
+    + (root.scrollWidth > root.clientWidth ? '  [HORIZONTAL OVERFLOW]' : '  [no overflow]'));
+  const p2 = h2.nextElementSibling.nextElementSibling;
+  for (const pair of [['exhibit para 1', p], ['exhibit para 2', p2]]) {
+    const el = pair[1];
+    const r2 = d.createRange(); r2.selectNodeContents(el);
+    const t2 = new Set([...r2.getClientRects()].map(x => Math.round(x.top)));
+    lines.push(pair[0] + ': ' + el.textContent.trim().length + ' chars, ' + t2.size
+      + ' lines, scrollW/clientW ' + el.scrollWidth + '/' + el.clientWidth
+      + (el.scrollWidth > el.clientWidth ? '  [OVERFLOWS]' : ''));
+  }
+  const w2 = p2.getBoundingClientRect().width;
+  const spans = [...p2.querySelectorAll('code')].map(c => ({t: c.textContent.trim(),
+    w: Math.round(c.getBoundingClientRect().width)})).sort((a,b) => b.w - a.w);
+  lines.push('widest code spans in para 2 (line box is ' + Math.round(w2) + 'px):');
+  for (const c of spans.slice(0, 4)) {
+    lines.push('   ' + String(c.w).padStart(4) + 'px  '
+      + String(Math.round(c.w / w2 * 100)).padStart(3) + '% of a line   "' + c.t + '"');
+  }
+  document.getElementById('out').textContent = lines.join('\n');
+}
+document.getElementById('f').addEventListener('load', run);
+</script>
+</body>
+</html>

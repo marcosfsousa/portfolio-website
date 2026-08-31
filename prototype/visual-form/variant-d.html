@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!-- PROTOTYPE — throwaway. Variant D "Marginalia", round 2.
+     Continuous page, no band. Section markers hang in the left margin, outside the text
+     column, so the page has structure without headings. Serif, light + dark. No JS.
+
+     Round 2 (issue #4): margin name label dropped; capability line given one step of
+     emphasis; German sentence given a DEUTSCH margin label; measure widened 33rem -> 37rem;
+     ELSEWHERE relabelled PORTFOLIO.
+
+     Round 3 (issue #4): hero aligned to the same text column as the labelled sections via an
+     empty margin cell; DEUTSCH tightened back onto the first screen. Both were caused by one
+     bug -- `.block { padding: 2.6rem 0 }` was a shorthand that reset .row's horizontal
+     padding to 0, which drifted the hero 24px and stripped side padding on mobile.
+
+     Geometry claims in these comments are measured with align-check.html in a real browser,
+     not read off the CSS. Font-stack coverage is measured with measure-check.py. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Marcos Sousa</title>
+<style>
+  :root {
+    --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+    --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    --bg: #fdfdfc;
+    --ink: #201f1d;
+    --quiet: #74716b;
+    --hair: #e5e3de;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #131312; --ink: #e8e6e1; --quiet: #928e87; --hair: #2a2926; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18.5px;
+    line-height: 1.7;
+  }
+  a { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; text-decoration-color: var(--quiet); }
+  a:hover { text-decoration-color: var(--ink); }
+  code { font-family: var(--mono); font-size: 0.84em; }
+  p { margin: 0 0 1.1rem; }
+
+  /* The grid: margin column + reading column. Collapses to one column below 62rem.
+     Row max-width is 12 + 2.5 + 37 + 3 = 54.5rem of content, rounded to 55rem. */
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    max-width: 55rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  @media (min-width: 62rem) {
+    .row { grid-template-columns: 12rem 1fr; gap: 2.5rem; }
+  }
+  .side {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    line-height: 1.9;
+    padding-top: 0.35rem;
+  }
+  @media (min-width: 62rem) { .side { text-align: right; } }
+
+  /* The identity block gets a real but empty margin cell rather than being placed into
+     column 2, so every row has the same two children and the tracks cannot disagree.
+     It stays empty on purpose: the gutter is a consistent blank at the top, not a slot
+     waiting for a label. */
+  .side.empty { padding: 0; }
+
+  /* Measure. 37rem is the only width where every face in the stack lands inside 65-75
+     characters at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. See measure-check.py. */
+  .col { max-width: 37rem; }
+
+  /* No band. The top of the page is simply the top of the page. */
+  .top { padding-top: 3.5rem; }
+  h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0.005em; }
+
+  /* Condition 3a. One step above the availability line beneath it — size and space, not
+     weight, because the serif faces in this stack have no intermediate weight to reach for.
+     Deliberately not a display line: the exhibit heading has to stay above the fold. */
+  .capability {
+    font-size: 1.34rem;
+    line-height: 1.42;
+    letter-spacing: -0.004em;
+    margin: 0 0 1.6rem;
+    text-wrap: pretty;
+  }
+
+  /* Vertical padding only, as longhand. The `padding: 2.6rem 0` shorthand here silently
+     reset .row's horizontal padding to 0, which both drifted the hero 24px out of column
+     and left the labelled sections touching the viewport edge on a phone. */
+  .block { padding-top: 2.6rem; padding-bottom: 2.6rem; }
+  /* The German sentence closes the first screen; it is not the page's second section.
+     No padding above, so the hero's own paragraph rhythm carries it and it reads as the
+     last line of the identity block. The full section gap stays below it, which is what
+     separates the first screen from the exhibit. */
+  .block.tail { padding-top: 0; padding-bottom: 1.5rem; }
+  h2 { font-size: 1.14rem; font-weight: 600; line-height: 1.4; margin: 0 0 1.05rem; }
+
+  /* Three entries: a sentence each, under one margin label. Hairlines separate them; there
+     is no per-entry heading, marker or box. */
+  .entry { padding: 1.1rem 0; }
+  .entry + .entry { border-top: 1px solid var(--hair); }
+  .entry p { margin: 0; }
+  .end { padding-top: 2.6rem; padding-bottom: 8rem; font-size: 0.9rem; color: var(--quiet); }
+  /* On a phone the capability line rewraps to roughly twice as many lines, and the margin
+     labels stack above their text instead of sitting beside it, which costs about 33px per
+     label that the two-column layout does not spend. Both push the exhibit heading past the
+     fold, so the vertical rhythm tightens. Section gaps of 2.6rem are too generous on a
+     390px screen anyway. Measured, not guessed: see align-check.html. */
+  @media (max-width: 40rem) {
+    .top { padding-top: 2.5rem; }
+    .block { padding-top: 2rem; padding-bottom: 2rem; }
+    .block.tail { padding-bottom: 1rem; }
+    .side { line-height: 1.5; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="row top">
+    <div class="side empty" aria-hidden="true"></div>
+    <div class="col">
+      <h1>Marcos Sousa</h1>
+      <p class="capability">Python backend engineer building LLM applications — RAG pipelines, agentic workflows, and Model Context Protocol servers with OAuth 2.0 / OpenID Connect / RBAC authorization.</p>
+      <p>Available for remote freelance contracts with clients in Germany and the EU.</p>
+      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a></p>
+    </div>
+  </div>
+
+  <div class="row block tail">
+    <div class="side">Deutsch</div>
+    <div class="col">
+      <p>I work with German-speaking clients. <a href="../../files/portfolio-referenzprojekte-de.pdf">German project overview — last revised 27 August 2026</a> (PDF).</p>
+    </div>
+  </div>
+
+  <div class="row block">
+    <div class="side">Exhibit</div>
+    <div class="col">
+      <h2>An MCP server where authorization is the subject</h2>
+      <p>An MCP server over a mock purchase-to-pay ERP. Two callers ask the same endpoint the same question and get different answers. A tool a caller may not reach is absent rather than refused. <a href="https://github.com/marcosfsousa/mcp-erp/blob/main/docs/walkthrough.md"><code>docs/walkthrough.md</code></a> follows one from the login screen onward, every wire exchange copied from a capture a test checks it against. <a href="https://github.com/marcosfsousa/mcp-erp/blob/main/docs/walkthrough.md#what-this-cost">What this cost</a> counts fifty-one commits of documentation before the first line of Python, and what running code did to that design.</p>
+      <p>Keycloak is the authorization server, and a client it provisions from a hosted metadata document inherits no PKCE pin. It arrives accepting <code>plain</code> while every authored client in the realm pins <code>S256</code>. The obvious repair is inert, because a profile is only as reachable as its policy's condition, and conditions are per-event. <a href="https://github.com/marcosfsousa/mcp-erp/blob/main/keycloak/README.md#what-a-hosted-identity-document-costs-the-realm"><code>keycloak/README.md</code></a> has both, checked against Keycloak 26.7.1.</p>
+      <p>Every client above is one I wrote. The <a href="https://github.com/marcosfsousa/mcp-erp/releases/download/v1.0.0/recording.mp4">recording</a> is not. 90 seconds, no audio, of Claude Code driving this server, with <code>claude.ai</code> as the <code>client_id</code> on the consent screen. <a href="https://github.com/marcosfsousa/mcp-erp/blob/main/docs/normative-register.md"><code>docs/normative-register.md</code></a> lists every <code>MUST</code> and <code>SHOULD</code> the project departs from.</p>
+    </div>
+  </div>
+
+  <div class="row block">
+    <div class="side">Portfolio</div>
+    <div class="col">
+      <div class="entry"><p>[Placeholder — #6] A retrieval pipeline over a regulated document set, where the hard problem was proving which passage an answer came from rather than making the answer sound right.</p></div>
+      <div class="entry"><p>[Placeholder — #6] A batch integration between two systems that disagreed about what a completed order was, resolved by writing the disagreement down before writing any code.</p></div>
+      <div class="entry"><p>[Placeholder — #6] An internal tool deleted after four months, and the note explaining why that was the correct outcome.</p></div>
+    </div>
+  </div>
+
+  <div class="row block">
+    <div class="side">Writing</div>
+    <div class="col"><p>The first post is in progress. <a href="#">Index</a>.</p></div>
+  </div>
+
+  <div class="row end">
+    <div class="side">Contact</div>
+    <div class="col">
+      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a><br>
+      <a href="#">Impressum</a> · <a href="#">Datenschutzerklärung</a></p>
+    </div>
+  </div>
+
+</body>
+</html>
