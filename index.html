@@ -1,13 +1,76 @@
 <!DOCTYPE html>
+<!-- marcossousa.de. Hand-written HTML, one same-origin stylesheet, no script.
+
+     Copy is verbatim from the copy tickets and is not edited here: the first screen and
+     the exhibit section from issue #5, the three portfolio entries from issue #6. Visual
+     form is issue #4's variant D, promoted from prototype/visual-form/variant-d.html.
+
+     The five links into mcp-erp are pinned to the tag v1.0.0 rather than main. Two of
+     them carry anchors generated from headings in a repository this one does not control
+     (#what-this-cost, #what-a-hosted-identity-document-costs-the-realm); on main, renaming
+     either heading rots the link silently — the page still loads, the browser ignores the
+     unknown anchor, and the reader lands at the top of a long document with nothing
+     reporting an error. The tag is enforced by the URL rather than by a convention held in
+     another repository. Accepted cost, recorded in #8: the linked prose stops tracking
+     mcp-erp's main branch. -->
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>Marcos Sousa</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marcos Sousa</title>
+<link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <h1>Marcos Sousa</h1>
-  <p>Website coming soon.</p>
+
+  <div class="row top">
+    <div class="side empty" aria-hidden="true"></div>
+    <div class="col">
+      <h1>Marcos Sousa</h1>
+      <p class="capability">Python backend engineer building LLM applications — RAG pipelines, agentic workflows, and Model Context Protocol servers with OAuth 2.0 / OpenID Connect / RBAC authorization.</p>
+      <p>Available for remote freelance contracts with clients in Germany and the EU.</p>
+      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a></p>
+    </div>
+  </div>
+
+  <div class="row block tail">
+    <div class="side">Deutsch</div>
+    <div class="col">
+      <p>I work with German-speaking clients. <a href="/files/portfolio-referenzprojekte-de.pdf">German project overview — last revised 27 August 2026</a> (PDF).</p>
+    </div>
+  </div>
+
+  <div class="row block">
+    <div class="side">Exhibit</div>
+    <div class="col">
+      <h2>An MCP server where authorization is the subject</h2>
+      <p>An MCP server over a mock purchase-to-pay ERP. Two callers ask the same endpoint the same question and get different answers. A tool a caller may not reach is absent rather than refused. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/walkthrough.md"><code>docs/walkthrough.md</code></a> follows one from the login screen onward, every wire exchange copied from a capture a test checks it against. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/walkthrough.md#what-this-cost">What this cost</a> counts fifty-one commits of documentation before the first line of Python, and what running code did to that design.</p>
+      <p>Keycloak is the authorization server, and a client it provisions from a hosted metadata document inherits no PKCE pin. It arrives accepting <code>plain</code> while every authored client in the realm pins <code>S256</code>. The obvious repair is inert, because a profile is only as reachable as its policy's condition, and conditions are per-event. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/keycloak/README.md#what-a-hosted-identity-document-costs-the-realm"><code>keycloak/README.md</code></a> has both, checked against Keycloak 26.7.1.</p>
+      <p>Every client above is one I wrote. The <a href="https://github.com/marcosfsousa/mcp-erp/releases/download/v1.0.0/recording.mp4">recording</a> is not. 90 seconds, no audio, of Claude Code driving this server, with <code>claude.ai</code> as the <code>client_id</code> on the consent screen. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/normative-register.md"><code>docs/normative-register.md</code></a> lists every <code>MUST</code> and <code>SHOULD</code> the project departs from.</p>
+    </div>
+  </div>
+
+  <div class="row block">
+    <div class="side">Portfolio</div>
+    <div class="col">
+      <h3>Where these patterns apply</h3>
+      <div class="entry"><p>Delegated authorization is needed the moment an AI assistant reaches a CRM, a ticket system, any internal system, because what it returns has to stay inside the entitlements of the person it acts for.</p></div>
+      <div class="entry"><p><a href="https://scienceq.app">ScienceQ</a> answers from a multilingual video corpus with sources attached — what internal knowledge systems need under raised data-protection rules — and declares itself an AI before you type a question, while Art. 50 of the EU AI Act obliges every customer-facing AI system to disclose its nature.</p></div>
+      <div class="entry"><p>Pre-sorting unstructured input at volume is the same job wherever it appears — <a href="https://github.com/marcosfsousa/agentic-job-hunter">JobScout</a> runs deterministic rules over the whole daily stream of listings and pays a model only for what survives them.</p></div>
+    </div>
+  </div>
+
+  <div class="row block">
+    <div class="side">Writing</div>
+    <div class="col"><p>The first post is in progress. <a href="/writing/">Index</a>.</p></div>
+  </div>
+
+  <div class="row end">
+    <div class="side">Contact</div>
+    <div class="col">
+      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a><br>
+      <a lang="de" href="/impressum/">Impressum</a> · <a lang="de" href="/datenschutz/">Datenschutzerklärung</a></p>
+    </div>
+  </div>
+
 </body>
 </html>
