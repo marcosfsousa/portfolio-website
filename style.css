@@ -1,0 +1,181 @@
+/* marcossousa.de — the whole stylesheet.
+   Promoted from prototype/visual-form/variant-d.html (issue #4, variant D "Marginalia").
+   Hand-written. No build step, no @font-face, no @import, no third-party request.
+
+   Two layouts share these tokens:
+     - the home page: a margin column of section labels beside a reading column;
+     - the subpages (Impressum, Datenschutzerklärung, /writing/): one reading column,
+       plain <main> + <footer>, no grid.
+
+   Inherited from #4 and not to be undone: .block, .tail and .end set their vertical
+   padding as longhand. Those three land on the same elements as .row, so a `padding`
+   shorthand on any of them silently resets the horizontal padding .row establishes —
+   which drifts the hero out of column on desktop and puts text against the viewport
+   edge on a phone. One bug, two symptoms that look unrelated.
+
+   The rule is about that collision, not about shorthands as such, so the three
+   shorthands below are correct and are #4's own: `.row { padding: 0 1.5rem }` is where
+   the horizontal padding comes from, and .side.empty and .entry sit on elements that
+   inherit none of it. Adding a fourth is safe only if you can say which rule it would
+   override.
+
+   The mobile media query stays last in the file for the same failure mode: written
+   earlier, a later base rule overrides it with no error anywhere. */
+
+:root {
+  --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+  --bg: #fdfdfc;
+  --ink: #201f1d;
+  --quiet: #74716b;
+  --hair: #e5e3de;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #131312; --ink: #e8e6e1; --quiet: #928e87; --hair: #2a2926; }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18.5px;
+  line-height: 1.7;
+}
+a { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; text-decoration-color: var(--quiet); }
+a:hover { text-decoration-color: var(--ink); }
+code { font-family: var(--mono); font-size: 0.84em; }
+p { margin: 0 0 1.1rem; }
+
+/* ---- home page grid ---------------------------------------------------- */
+
+/* Margin column + reading column. Collapses to one column below 62rem.
+   Row max-width is 12 + 2.5 + 37 + 3 = 54.5rem of content, rounded to 55rem. */
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+  max-width: 55rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+@media (min-width: 62rem) {
+  .row { grid-template-columns: 12rem 1fr; gap: 2.5rem; }
+}
+.side {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--quiet);
+  line-height: 1.9;
+  padding-top: 0.35rem;
+}
+@media (min-width: 62rem) { .side { text-align: right; } }
+
+/* The identity block gets a real but empty margin cell rather than being placed into
+   column 2, so every row has the same two children and the tracks cannot disagree.
+   It stays empty on purpose: the gutter is a consistent blank at the top, not a slot
+   waiting for a label. */
+.side.empty { padding: 0; }
+
+/* Measure. 37rem is the only width where every face in the stack lands inside 65-75
+   characters at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. Browser-measured 67.3. */
+.col { max-width: 37rem; }
+
+/* No band. The top of the page is simply the top of the page. */
+.top { padding-top: 3.5rem; }
+h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0.005em; }
+
+/* Condition 3a. One step above the availability line beneath it — size and space, not
+   weight, because the serif faces in this stack have no intermediate weight to reach
+   for. Deliberately not a display line: the exhibit heading has to stay near the fold. */
+.capability {
+  font-size: 1.34rem;
+  line-height: 1.42;
+  letter-spacing: -0.004em;
+  margin: 0 0 1.6rem;
+  text-wrap: pretty;
+}
+
+.block { padding-top: 2.6rem; padding-bottom: 2.6rem; }
+
+/* The German sentence closes the first screen; it is not the page's second section.
+   No padding above, so the hero's own paragraph rhythm carries it and it reads as the
+   last line of the identity block. The full section gap stays below it, which is what
+   separates the first screen from the exhibit. */
+.block.tail { padding-top: 0; padding-bottom: 1.5rem; }
+
+h2 { font-size: 1.14rem; font-weight: 600; line-height: 1.4; margin: 0 0 1.05rem; }
+
+/* The portfolio heading is typographically subordinate to the exhibit's, which is a
+   content requirement from #6 rather than a preference: 112 words against the exhibit's
+   174 is not a subordinate ratio, so nothing but type carries it. */
+h3 {
+  font-size: 0.96rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.005em;
+  color: var(--quiet);
+  margin: 0 0 0.4rem;
+}
+
+/* Three entries: a sentence each, under one margin label. Hairlines separate them; there
+   is no per-entry heading, marker or box. */
+.entry { padding: 1.1rem 0; }
+.entry + .entry { border-top: 1px solid var(--hair); }
+.entry p { margin: 0; }
+
+.end { padding-top: 2.6rem; padding-bottom: 8rem; font-size: 0.9rem; color: var(--quiet); }
+
+/* ---- subpages: Impressum, Datenschutzerklärung, /writing/ --------------- */
+
+/* Same measure and same gutter as .row, reached without the grid. These pages carry no
+   margin labels: there is nothing to navigate. */
+main {
+  max-width: 37rem;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 3.5rem;
+}
+main h2 { margin-top: 2.2rem; }
+main h1 + h2 { margin-top: 1.6rem; }
+
+body > footer {
+  max-width: 37rem;
+  margin: 2.6rem auto 0;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 2.6rem;
+  padding-bottom: 8rem;
+  font-size: 0.9rem;
+  color: var(--quiet);
+  border-top: 1px solid var(--hair);
+}
+body > footer a { white-space: nowrap; }
+
+/* ---- mobile: stays last in the file ------------------------------------ */
+
+/* On a phone the capability line rewraps to roughly twice as many lines, and the margin
+   labels stack above their text instead of sitting beside it, which costs about 33px per
+   label that the two-column layout does not spend. Section gaps of 2.6rem are too
+   generous on a 390px screen anyway. Measured, not guessed: prototype/align-check.html.
+
+   #4 left one thing open for this build round: the 390px measure is ~39 characters,
+   below the ~45 comfortable minimum, and it costed the two ways out — 17px buys ~43,
+   16.5px buys ~45. Decided here against the final copy rather than against placeholder:
+   the type size stays 18.5px. Rendered at a true 390px and read, the exhibit's longest
+   paragraph holds its rag, the inline code spans do not break, and nothing is orphaned;
+   shrinking the body face to buy six characters costs more than the short measure does.
+   Recorded so the next editor knows this was decided and not overlooked. Still worth
+   confirming on a real handset, which no headless render can stand in for. */
+@media (max-width: 40rem) {
+  .top { padding-top: 2.5rem; }
+  .block { padding-top: 2rem; padding-bottom: 2rem; }
+  .block.tail { padding-bottom: 1rem; }
+  .side { line-height: 1.5; }
+  main { padding-top: 2.5rem; }
+}
