@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- The Keycloak post (issue #9). Written against the section list fixed in that ticket
+     before drafting, and not renegotiated during it.
+
+     No block-level code and no <pre>. style.css has a rule for `code` and none for `pre`,
+     and it calls itself the whole stylesheet — a post-local <style> block would make that
+     comment false, and that comment is what protects the next editor from #4's cascade
+     bug. So every identifier is inline <code>, the Keycloak warning is quoted inline
+     rather than in a <blockquote> (also unstyled), and the three lines of the fix are
+     linked to the realm file rather than reproduced here. A second post wanting a code
+     block needs a `pre` rule in style.css: named as an open item in #9, unassigned.
+
+     Every claim here is pinned to Keycloak 26.7.1, commit 73f08b39. The two mcp-erp links
+     are pinned to v1.0.0 for #8's reason: those anchors are generated from headings in a
+     repository this one does not control, and on main a rename rots the link silently.
+
+     The MCP guide has no versioned URL — every candidate 404s — so the sentence about it
+     carries the date it was checked instead of a version, inline, in the sentence making
+     the claim. It ages into a historical statement rather than a false one. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A provisioned Keycloak client inherits no PKCE pin, and the obvious fix is inert — Marcos Sousa</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <h1>A provisioned Keycloak client inherits no PKCE pin, and the obvious fix is inert</h1>
+
+    <p>Keycloak 26.7.1, in a realm where every hand-authored client carries <code>"pkce.code.challenge.method": "S256"</code> and refuses <code>plain</code>. Enable the OAuth Client ID Metadata Document feature, point an authorization request at a published metadata document as its <code>client_id</code>, and Keycloak fetches that document and provisions a client from it. The client it provisioned accepted <code>plain</code>. It also accepted a request carrying no <code>code_challenge</code> at all.</p>
+
+    <p>Nothing was misconfigured. The realm's PKCE settings were what they had always been, the feature was enabled the way its guide describes, and the client policy gating the feature was doing exactly its job. There was no configuration mistake to find, which is the part worth writing down.</p>
+
+    <h2>Why it has no pin</h2>
+
+    <p>The pin is a client attribute. Every authored client in the realm names it in its own JSON, and that attribute is what makes those clients refuse <code>plain</code>. A client the executor creates carries only the attributes the executor puts there, and the provider that builds it sets three: consent required, display on the consent screen, and the consent text naming the document's host. No PKCE key is among them, and the CIMD provider source contains no reference to PKCE anywhere.</p>
+
+    <p>The pin was not the only thing missing, which is how you can tell this is inheritance rather than a PKCE-specific bug: the same client arrived with no <code>basic</code> scope and therefore no <code>sub</code> claim, no audience mapper, and none of the realm's capability scopes, because a provisioned client inherits the realm's default client scopes and this realm — every client of which had always named its own — had never declared any.</p>
+
+    <p>The feature itself is a draft standard for a client that identifies itself by URL instead of by pre-registration, and it is on here because that is how an MCP client registers with an authorization server it has never met. Keycloak documents the setup in its <a href="https://www.keycloak.org/securing-apps/mcp-authz-server">Model Context Protocol guide</a>.</p>
+
+    <h2>The warning you were already given</h2>
+
+    <p>Before going further: Keycloak documents the mechanism behind all of this, and warns about it. The Server Administration Guide's <a href="https://www.keycloak.org/docs/26.7.1/server_admin/index.html#_client_policy_conditions_evaluation">Conditions evaluation</a> section says that “some condition types are evaluated in all the request types, however some condition types are evaluated just during certain requests”, that “in some cases, it may not be obvious whether particular condition is evaluated or not”, and that you should therefore test your scenarios.</p>
+
+    <p>That warning lives in the guide covering client policies. The guide that walks you through turning this feature on is a different document and never sends you there: its source carries none of it at 26.7.1 or at 26.7.3, and the page as published on 2 September 2026 carries none of it either. What follows is what testing found, and the shape is sharper than <em>it may not be obvious</em> suggests.</p>
+
+    <h2>The obvious repair</h2>
+
+    <p>The feature is configured as a client profile behind a client policy. The profile holds <code>client-id-metadata-document</code>, the executor that fetches the document and provisions the client. The policy's condition, <code>client-id-uri</code>, decides which <code>client_id</code> URLs reach that executor.</p>
+
+    <p>So the repair writes itself. Keycloak ships a <code>pkce-enforcer</code> executor whose entire job is to require <code>S256</code>. Add it to the profile that is already provisioning the client you want pinned, and the client gets a pin. One executor, one line, done.</p>
+
+    <h2>Why it is inert</h2>
+
+    <p><code>ClientIdUriSchemeCondition</code> has exactly one case in its switch statement, <code>PRE_AUTHORIZATION_REQUEST</code>, and that is a defensible choice — it is the only point in the flow where a <code>client_id</code> that happens to be a URL means anything, before any client has been resolved. Every other event falls through to <code>default</code> and returns <code>ABSTAIN</code>.</p>
+
+    <p><code>PKCEEnforcerExecutor</code> acts on four events. On <code>REGISTER</code> and <code>UPDATE</code> it auto-configures and validates the pin on a proposed client; on <code>AUTHORIZATION_REQUEST</code> and <code>TOKEN_REQUEST</code> it checks the live request. <code>PRE_AUTHORIZATION_REQUEST</code> is not one of them.</p>
+
+    <p>The two sets are disjoint. On the one event the condition votes on, the executor does nothing. On the four events the executor works on, the condition abstains — and for a policy carrying a single condition, as this one does, an abstention is the entire vote, and the policy needs at least one <code>yes</code> to be satisfied. The scope of that last sentence is single-condition policies rather than these two in particular: a policy with several conditions can still be satisfied by a different one voting <code>yes</code>.</p>
+
+    <p>Nothing reports any of this. The profile is valid and the policy is valid, both import without complaint, and the admin console shows the executor sitting inside the profile where you put it. There is no error at startup and no line in the event log at request time, because from the engine's point of view nothing went wrong: a policy was not satisfied, which is the ordinary case for most policies on most requests. The executor sits in the profile looking like enforcement and enforcing nothing, and it survives review for precisely that reason.</p>
+
+    <h2>Why adding a second condition does not rescue it</h2>
+
+    <p>The next move is to keep the profile and widen the policy — add a second condition that does vote on the events the executor works on. That does not work either, and the reason is in the types rather than in a list of events.</p>
+
+    <p>A condition receives a <code>ClientPolicyContext</code> and decides from what that context carries. <code>client-access-type</code> votes in two situations and abstains in every other: where the context carries a resolved client it can read the access type off, and at <code>REGISTER</code>, where there is no client yet but there is a proposed representation to read instead. <code>PRE_AUTHORIZATION_REQUEST</code> offers neither. Nothing has been resolved — that is the entire purpose of the event, since the <code>client_id</code> is a URL nobody has dereferenced yet and dereferencing it is what the profile is about to do — and it is not <code>REGISTER</code> either.</p>
+
+    <p>So <code>client-access-type</code> abstains on <code>PRE_AUTHORIZATION_REQUEST</code>, the one event <code>client-id-uri</code> votes on. The condition that selects a client by the identifier it arrived with, and the condition that selects it by what it turned out to be, cannot both vote on any single event. The two things you want to say about a provisioned client cannot be said in one policy.</p>
+
+    <h2>What the fix actually is</h2>
+
+    <p>The pin is a second policy: <code>pkce-enforcer</code> in its own profile, bound by a condition on <code>client-access-type</code> being <code>public</code> — bound, that is, to something true of every client in this realm rather than to a name or to an identifier scheme.</p>
+
+    <p>That condition votes wherever a client is resolved, which covers both runtime events the executor handles, and it votes on <code>REGISTER</code> as well. The last one earns its place: provisioning fires a <code>REGISTER</code> client-policy event before the client is created, so the executor's <code>auto-configure</code> stamps <code>S256</code> onto the provisioned client as it is being made. The attribute and the policy end up agreeing rather than one standing in for the other. It is <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/keycloak/import/mcp-erp-realm.json">three lines in the realm file</a>, and the pin then holds for the authored clients, for the provisioned one that is not in that file at all, and for any client the realm gains later.</p>
+
+    <h2>What to check in your own realm</h2>
+
+    <p>The check is mechanical. For every executor in a profile, name the events it acts on. For every condition on the policy binding that profile, name the events it votes on. If the two sets are disjoint, the executor is decoration, and nothing anywhere is going to tell you.</p>
+
+    <p>The same silence has a second exit in this feature. Two allow-lists have to name a domain — the executor's permitted domains and the policy condition's — and naming it in one but not the other means the condition never matches, so the profile never runs, so the identifier is never dereferenced. The authorization request then fails with <code>client_not_found</code>: a no-such-client answer for a client nothing ever went to look for. A condition declining to match reads, downstream, as absence.</p>
+
+    <p>All of it was found by running the thing rather than by reading it, in a realm that exists to be read — <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/keycloak/README.md#what-a-hosted-identity-document-costs-the-realm"><code>keycloak/README.md</code></a> carries the findings against the realm file they came out of, checked against 26.7.1 through a running container.</p>
+  </main>
+
+  <footer>
+    <a href="/">Marcos Sousa</a> · <a href="/writing/">Writing</a> · <a lang="de" href="/impressum/">Impressum</a> · <a lang="de" href="/datenschutz/">Datenschutzerklärung</a>
+  </footer>
+</body>
+</html>
