@@ -70,20 +70,34 @@ a:hover { text-decoration-color: var(--ink); }
    padding on the first and last fragment only, so a background renders as a visibly
    broken box where padding alone is invisible.
 
-   Weight is a request, not a guarantee, and on Windows it depends on which face the
-   stack actually reaches. "Cascadia Mono" comes before Consolas and ships with Windows
-   Terminal, and it is variable over 200-700, so where it is installed 500 is a real
-   weight and renders. Where it is not, the stack falls to Consolas, which ships Regular
-   and Bold only; a desired 500 is matched 400-to-500 ascending and then downwards, so it
-   lands on 400 and the treatment degrades to padding alone. Both outcomes are correct
-   and the rule is written to read either way — do not add a fallback to force the
-   weight onto Consolas.
+   What `500` actually returns was measured, not predicted, because the prediction was
+   wrong. On the Windows desktop this was verified on, the stack reaches "Cascadia Mono",
+   which precedes Consolas and ships with Windows Terminal, and there a desired 500
+   renders as the family's SemiBold — one step heavier than the value names. Two
+   mechanisms: DevTools reports the face on the post's first paragraph as
+   CascadiaMonoRoman-SemiBold, and a canvas ink test gives 500 and 600 byte-identical
+   coverage, both ~17% above 400.
 
-   In particular do not reach past 500. Above 500 the match runs upwards first, so on
-   Consolas 600 synthesises nothing: it lands on the real 700 Bold, and full bold across
-   44 inline spans is heavier than the prose it sits in, which is what this rule exists
-   to avoid. (#15 gave "600+ synthesises" as the reason. That is wrong for any family
-   shipping a real Bold; the ruling it argued for is right and stands.) */
+   The CSS fallback rules predict the opposite. For a desired 500 with no 500 in the
+   family, the match checks 500 and then descends, which should reach Regular 400. Chrome
+   does not do that for this local family, so do not reason about the rendered weight
+   from the algorithm here — look at it.
+
+   Where Cascadia Mono is absent the stack falls to Consolas, Regular and Bold only. That
+   case is predicted to land on 400 and degrade to padding alone, and it stays a
+   prediction: nothing has been rendered on such a machine. On a handset neither family
+   exists and the stack falls through to the generic monospace, a third case again; the
+   post was read there in Chrome and Firefox with nothing flagrant seen, though the face
+   was not identified.
+
+   500 stays, decided against the rendering rather than against the value's name — the
+   SemiBold outcome was looked at on both surfaces and accepted. Do not reach past it.
+   The observation above is itself the argument: asked for 500, this stack went up a step
+   rather than down, so a request above 500 has further to climb and a real Bold waiting
+   at the top of both families. Full bold across 44 inline spans is heavier than the
+   prose it sits in. (#15 gave "600+ synthesises" as the reason. Synthesis is the wrong
+   worry for a family shipping a real Bold — the face would be genuine and still too
+   heavy. The ruling is right; only its reason needed replacing.) */
 code {
   font-family: var(--mono);
   font-size: 0.84em;
@@ -251,12 +265,12 @@ body > footer a { white-space: nowrap; }
    this was decided and not overlooked. Still worth confirming on a real handset, which
    no headless render can stand in for.
 
-   That reading carried one more clause — that the inline code spans do not break — and
-   #15 removed it rather than leave it standing, because it was measured against a `code`
-   rule with no padding and #15 gave `code` 0.15em on each side. UNVERIFIED until someone
-   reads the post's opening paragraph and its PKCEEnforcerExecutor paragraph at a true
-   390px on a handset. Restore the clause or replace it with what they see, and delete
-   this note either way.
+   That reading carried one more clause — that the inline code spans do not break — which
+   #15 removed rather than leave standing, since it was measured against a `code` rule
+   with no padding and #15 then gave `code` 0.15em on each side. It was re-read afterwards
+   on a handset, in Chrome and Firefox, on the post's opening paragraph and on its
+   PKCEEnforcerExecutor paragraph, with nothing flagrant seen, so the clause stands again.
+   Read rather than measured: it carries that weight and no more.
 
    blockquote drops its indent and its hairline here. At 390px the reading column is
    342px and the measure is already ~39 characters; a 1.1rem indent takes it to ~37, and
