@@ -7,6 +7,11 @@
      - the subpages (Impressum, Datenschutzerklärung, /writing/): one reading column,
        plain <main> + <footer>, no grid.
 
+   A third thing the file does, and the only part of it that is not layout: the post-body
+   element rules added by #15 — `code` for inline identifiers, `pre` for block-level code,
+   `blockquote` for quotations. `code` is not post-only. It reaches nine spans on the home
+   page as well, three of them inside link text.
+
    Inherited from #4 and not to be undone: .block, .tail and .end set their vertical
    padding as longhand. Those three land on the same elements as .row, so a `padding`
    shorthand on any of them silently resets the horizontal padding .row establishes —
@@ -18,6 +23,17 @@
    the horizontal padding comes from, and .side.empty and .entry sit on elements that
    inherit none of it. Adding a fourth is safe only if you can say which rule it would
    override.
+
+   #15's three rules cannot collide that way, and that was established rather than
+   assumed. Every selector here that sets padding or margin is a class or a
+   non-replaced-element selector — .row, .side, .side.empty, .top, .block, .block.tail,
+   .entry, .end, main, body > footer, h1, h2, h3, p, .capability and the mobile overrides
+   — and not one of them is `code`, `pre` or `blockquote`. No `code`, `pre` or
+   `blockquote` on any served page carries a class attribute at all. So the three land on
+   descendants of the padding-setters and never on the same element, and same-element
+   collision is what #4's failure mode requires. `pre code` is a different matter and is
+   not optional: `code` is an element selector, so it reaches `pre > code` too, and the
+   reset is what keeps inline padding and weight off every line of a code block.
 
    The mobile media query stays last in the file for the same failure mode: written
    earlier, a later base rule overrides it with no error anywhere. */
@@ -46,8 +62,70 @@ body {
 }
 a { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; text-decoration-color: var(--quiet); }
 a:hover { text-decoration-color: var(--ink); }
-code { font-family: var(--mono); font-size: 0.84em; }
+
+/* Separation from the surrounding prose by spacing and weight, never by a tinted box.
+   The post carries 44 of these, eight paragraphs holding three or more and two holding
+   six; at that density a background reads as noise across the page rather than as
+   emphasis inside a sentence. It would also break: an inline span that wraps gets its
+   padding on the first and last fragment only, so a background renders as a visibly
+   broken box where padding alone is invisible.
+
+   Weight is a request, not a guarantee, and on Windows it depends on which face the
+   stack actually reaches. "Cascadia Mono" comes before Consolas and ships with Windows
+   Terminal, and it is variable over 200-700, so where it is installed 500 is a real
+   weight and renders. Where it is not, the stack falls to Consolas, which ships Regular
+   and Bold only; a desired 500 is matched 400-to-500 ascending and then downwards, so it
+   lands on 400 and the treatment degrades to padding alone. Both outcomes are correct
+   and the rule is written to read either way — do not add a fallback to force the
+   weight onto Consolas.
+
+   In particular do not reach past 500. Above 500 the match runs upwards first, so on
+   Consolas 600 synthesises nothing: it lands on the real 700 Bold, and full bold across
+   44 inline spans is heavier than the prose it sits in, which is what this rule exists
+   to avoid. (#15 gave "600+ synthesises" as the reason. That is wrong for any family
+   shipping a real Bold; the ruling it argued for is right and stands.) */
+code {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  font-weight: 500;
+  padding-left: 0.15em;
+  padding-right: 0.15em;
+}
 p { margin: 0 0 1.1rem; }
+
+/* Nothing served uses `pre` or `blockquote` yet; both are for the second write-up and are
+   speculative by design. `pre` scrolls itself rather than the page, so a long line never
+   widens the viewport, and it carries the same hairline the entries and the footer
+   already use. No background under either element, and no downloaded code face and no
+   highlighter library: condition 8 and the stack rule out Prism, highlight.js and every
+   @font-face code face permanently.
+
+   In `pre code`, `inherit` is doing specific work in both places and neither is
+   decorative: `font-size: inherit` takes `pre`'s already-computed size, where `0.84em`
+   would multiply against it and give 0.71em; `font-weight: inherit` reaches past `code`
+   to `pre`, which sets none, so the weight is the body's. */
+pre {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  line-height: 1.5;
+  margin-top: 0;
+  margin-bottom: 1.1rem;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--hair);
+  overflow-x: auto;
+  max-width: 100%;
+}
+pre code { font-size: inherit; font-weight: inherit; padding-left: 0; padding-right: 0; }
+
+/* Quotation by indent, hairline and colour, not by a shaded block. The indent is the one
+   thing here that costs measure, which is why the mobile query drops it. */
+blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--hair);
+  color: var(--quiet);
+}
+blockquote p:last-child { margin-bottom: 0; }
 
 /* ---- home page grid ---------------------------------------------------- */
 
@@ -168,14 +246,29 @@ body > footer a { white-space: nowrap; }
    below the ~45 comfortable minimum, and it costed the two ways out — 17px buys ~43,
    16.5px buys ~45. Decided here against the final copy rather than against placeholder:
    the type size stays 18.5px. Rendered at a true 390px and read, the exhibit's longest
-   paragraph holds its rag, the inline code spans do not break, and nothing is orphaned;
-   shrinking the body face to buy six characters costs more than the short measure does.
-   Recorded so the next editor knows this was decided and not overlooked. Still worth
-   confirming on a real handset, which no headless render can stand in for. */
+   paragraph holds its rag and nothing is orphaned; shrinking the body face to buy six
+   characters costs more than the short measure does. Recorded so the next editor knows
+   this was decided and not overlooked. Still worth confirming on a real handset, which
+   no headless render can stand in for.
+
+   That reading carried one more clause — that the inline code spans do not break — and
+   #15 removed it rather than leave it standing, because it was measured against a `code`
+   rule with no padding and #15 gave `code` 0.15em on each side. UNVERIFIED until someone
+   reads the post's opening paragraph and its PKCEEnforcerExecutor paragraph at a true
+   390px on a handset. Restore the clause or replace it with what they see, and delete
+   this note either way.
+
+   blockquote drops its indent and its hairline here. At 390px the reading column is
+   342px and the measure is already ~39 characters; a 1.1rem indent takes it to ~37, and
+   trimming the indent rather than removing it buys back well under one character, so it
+   is not worth the rule. Colour and the paragraph rhythm carry the quotation on a phone
+   at no cost to measure at all. `pre` keeps its indent: its lines scroll rather than
+   wrap, so measure is not a constraint on it. */
 @media (max-width: 40rem) {
   .top { padding-top: 2.5rem; }
   .block { padding-top: 2rem; padding-bottom: 2rem; }
   .block.tail { padding-bottom: 1rem; }
   .side { line-height: 1.5; }
   main { padding-top: 2.5rem; }
+  blockquote { padding-left: 0; border-left: 0; }
 }
