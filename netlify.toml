@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/karte"
+  to = "https://scienceq.app"
+  status = 302
