@@ -2,10 +2,11 @@
    Promoted from prototype/visual-form/variant-d.html (issue #4, variant D "Marginalia").
    Hand-written. No build step, no @font-face, no @import, no third-party request.
 
-   Two layouts share these tokens:
-     - the home page: a margin column of section labels beside a reading column;
-     - the subpages (Impressum, Datenschutzerklärung, /writing/): one reading column,
-       plain <main> + <footer>, no grid.
+   Two layouts: the home page (margin labels beside a reading column) and the subpages
+   (one reading column, no grid).
+
+   Every page carries the same <header> and <footer>; `body.home` aligns them on the
+   home page.
 
    A third thing the file does, and the only part of it that is not layout: the post-body
    element rules added by #15 — `code` for inline identifiers, `pre` for block-level code,
@@ -24,16 +25,8 @@
    inherit none of it. Adding a fourth is safe only if you can say which rule it would
    override.
 
-   #15's three rules cannot collide that way, and that was established rather than
-   assumed. Every selector here that sets padding or margin is a class or a
-   non-replaced-element selector — .row, .side, .side.empty, .top, .block, .block.tail,
-   .entry, .end, main, body > footer, h1, h2, h3, p, .capability and the mobile overrides
-   — and not one of them is `code`, `pre` or `blockquote`. No `code`, `pre` or
-   `blockquote` on any served page carries a class attribute at all. So the three land on
-   descendants of the padding-setters and never on the same element, and same-element
-   collision is what #4's failure mode requires. `pre code` is a different matter and is
-   not optional: `code` is an element selector, so it reaches `pre > code` too, and the
-   reset is what keeps inline padding and weight off every line of a code block.
+   Only their own rules set padding or margin on #15's code, pre and blockquote, so that
+   collision can't reach them. Why: docs/DECISIONS.md.
 
    The mobile media query stays last in the file for the same failure mode: written
    earlier, a later base rule overrides it with no error anywhere. */
@@ -177,8 +170,8 @@ blockquote p:last-child { margin-bottom: 0; }
    characters at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. Browser-measured 67.3. */
 .col { max-width: 37rem; }
 
-/* No band. The top of the page is simply the top of the page. */
-.top { padding-top: 3.5rem; }
+/* Down from 3.5rem. With the nav above, the name sits about 2rem lower than before. */
+.top { padding-top: 2.5rem; }
 h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0.005em; }
 
 /* Condition 3a. One step above the availability line beneath it — size and space, not
@@ -220,18 +213,18 @@ h3 {
 .entry + .entry { border-top: 1px solid var(--hair); }
 .entry p { margin: 0; }
 
-.end { padding-top: 2.6rem; padding-bottom: 8rem; font-size: 0.9rem; color: var(--quiet); }
+/* No bottom padding: the footer below brings its own. Longhand, per the note at the top. */
+.end { padding-top: 2.6rem; padding-bottom: 0; font-size: 0.9rem; color: var(--quiet); }
 
 /* ---- subpages: Impressum, Datenschutzerklärung, /writing/ --------------- */
 
-/* Same measure and same gutter as .row, reached without the grid. These pages carry no
-   margin labels: there is nothing to navigate. */
+/* Same measure and gutter as .row, without the grid. */
 main {
   max-width: 37rem;
   margin: 0 auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  padding-top: 3.5rem;
+  padding-top: 2.5rem;
 }
 main h2 { margin-top: 2.2rem; }
 main h1 + h2 { margin-top: 1.6rem; }
@@ -248,6 +241,32 @@ body > footer {
   border-top: 1px solid var(--hair);
 }
 body > footer a { white-space: nowrap; }
+
+/* ---- shared header: the nav, on every page (#18) ----------------------- */
+
+/* The footer's box and type, at the top, without the hairline. */
+body > header {
+  max-width: 37rem;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--quiet);
+}
+body > header a { white-space: nowrap; }
+
+/* Home page: header and footer match the reading column, which from 62rem starts at
+   50% - 11.5rem. See docs/DECISIONS.md. */
+.home > header, .home > footer { max-width: 55rem; }
+@media (min-width: 62rem) {
+  .home > header, .home > footer {
+    max-width: 37rem;
+    margin-left: calc(50% - 11.5rem);
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 
 /* ---- mobile: stays last in the file ------------------------------------ */
 
@@ -279,10 +298,11 @@ body > footer a { white-space: nowrap; }
    at no cost to measure at all. `pre` keeps its indent: its lines scroll rather than
    wrap, so measure is not a constraint on it. */
 @media (max-width: 40rem) {
-  .top { padding-top: 2.5rem; }
+  .top { padding-top: 2rem; }
   .block { padding-top: 2rem; padding-bottom: 2rem; }
   .block.tail { padding-bottom: 1rem; }
   .side { line-height: 1.5; }
-  main { padding-top: 2.5rem; }
+  main { padding-top: 2rem; }
+  body > header { padding-top: 1rem; }
   blockquote { padding-left: 0; border-left: 0; }
 }

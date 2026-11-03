@@ -2,7 +2,7 @@
 
 Personal site of Marcos Sousa (Gewerbe: Marcos Sousa Software- und KI-Entwicklung).
 
-This file is the home of the site's standing rules. Decisions made while working in this repo are recorded here, with their date. They are not mirrored anywhere else. Seeded 03.11.2026 from the decisions of 02.11.2026.
+This file is the home of the site's standing rules. Decisions made while working in this repo are recorded here, with their date. Styling and markup decisions, with their reasons, live in `docs/DECISIONS.md`; site-level rules stay here. Neither is mirrored in the other. (03.11.2026) Seeded 03.11.2026 from the decisions of 02.11.2026.
 
 Work is tracked as GitHub issues in this repo, one issue per deliverable. Task briefings arrive in the session. They are not committed. If a briefing conflicts with this file, stop and ask.
 
@@ -64,6 +64,12 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 - German published text is supplied. Do not write or reword it; flag anything that looks wrong.
 - English write-ups may be drafted here. They go live only after Marcos approves the text.
 - The Datenschutzerklärung changes only with supplied text, in the same change as the feature that requires it.
+
+## Changes and PRs
+
+- A comment explains only the code immediately after it, in at most 150 characters. Before writing one, ask whether the code needs it at all. No lists or counts of things elsewhere in the code. The reason behind a styling or markup choice goes in `docs/DECISIONS.md`, and the comment names the entry when the code needs it. Applies to new and changed comments. (03.11.2026)
+- Commit, push, opening a PR, running `/review-pr` and posting its review each wait for Marcos's go-ahead, asked for each time. Approving a plan is not a go-ahead for any of them. (03.11.2026)
+- Every PR gets a `/review-pr` run after it is opened, under the rule above. (03.11.2026)
 
 ## Rejected (do not propose)
 
