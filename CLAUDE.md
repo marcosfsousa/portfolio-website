@@ -17,7 +17,7 @@ Netlify, deployed on push to `main`. No build step.
 - No client-side analytics, trackers or cookies. Netlify's server-side Web Analytics stays as configured in the Netlify dashboard; nothing else measures visits. (03.11.2026)
 - No theme toggle. No photo.
 - No external resources: no third-party scripts, embeds, fonts, form endpoints or Netlify Functions. Each one changes the Datenschutzerklärung and Marcos's provider list, so none is added to solve a task. Stop and ask.
-- Netlify publishes the repo root. A new file that is not part of the site gets a forced-404 rule in `netlify.toml` in the same change. (03.11.2026)
+- Netlify publishes only `site/` (`publish = "site"` in `netlify.toml`). Everything served lives under `site/`; files outside it, such as `CLAUDE.md` and `README.md`, are never served. (03.11.2026)
 - Keep it small. The result matters, not the machinery.
 
 ## Readers
@@ -77,7 +77,7 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 ## Out of scope until decided
 
 - What `/karte` points to, and whether it becomes the website.
-- Whether `files/portfolio-referenzprojekte-de.pdf` is kept.
+- Whether `site/files/portfolio-referenzprojekte-de.pdf` is kept.
 
 ## Changing this file
 
