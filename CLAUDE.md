@@ -14,7 +14,8 @@ Netlify, deployed on push to `main`. No build step.
 
 - Hand-written static HTML and CSS. `/writing/` is the pattern for new pages.
 - System font stack. No web fonts, remote or self-hosted.
-- No analytics, trackers or cookies. No theme toggle. No photo.
+- No client-side analytics, trackers or cookies. Netlify's server-side Web Analytics stays as configured in the Netlify dashboard; nothing else measures visits. (03.11.2026)
+- No theme toggle. No photo.
 - No external resources: no third-party scripts, embeds, fonts, form endpoints or Netlify Functions. Each one changes the Datenschutzerklärung and Marcos's provider list, so none is added to solve a task. Stop and ask.
 - Keep it small. The result matters, not the machinery.
 
@@ -26,7 +27,7 @@ Non-technical SME decision-makers first. Whoever lands on the site reads, in non
 
 - German: homepage, `/portfolio/` cards, campaign pages, Impressum, Datenschutzerklärung, and the navigation on every page.
 - English: `/portfolio/<slug>/` pages and `/writing/`.
-- Links from a German page to an English page are marked „(englisch)“.
+- Links in the page content from a German page to an English page are marked „(englisch)“. Navigation entries are not marked. (03.11.2026)
 - Every page sets its own `<html lang>`.
 
 ## Structure
@@ -55,6 +56,7 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 - Same header and footer on every page. The footer links Impressum and Datenschutzerklärung.
 - A change to the header or footer is made on every page in the same change.
 - Before every push: check all pages for header, footer, both legal links, `lang`, and „(englisch)“ markers.
+- After every deploy: check the served HTML of every page. It contains no `<script>` tags and nothing injected by Netlify. Checking the repo is not enough. (03.11.2026)
 
 ## Text
 
