@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScienceQ (demo) — Marcos Sousa</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav lang="de" aria-label="Hauptnavigation">
+      <a href="/">Start</a> · <a href="/portfolio/">Portfolio</a> · <a href="/writing/">Artikel</a> · <a href="/#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>ScienceQ (demo)</h1>
+
+    <p>Python · LangChain and LangGraph · Cohere multilingual embeddings and Rerank · Pinecone · gpt-oss-120b via Groq · FastAPI · React · Google Cloud Run</p>
+
+    <h2>What this project shows</h2>
+    <ul>
+      <li>Answers grounded in sources. An answer cites the videos it came from as clickable timestamps, so a reader can check it.</li>
+      <li>One search across five languages. Transcripts in all five share one multilingual embedding space, searched with one index.</li>
+      <li>It says when it does not know. If nothing relevant clears a confidence threshold, the assistant says so instead of inventing an answer.</li>
+      <li>It discloses that it is an AI, as Art. 50(1) of the EU AI Act requires: before the first question, on every answer, and when a user asks whether they are talking to a bot.</li>
+    </ul>
+
+    <h2>How it works</h2>
+    <p>ScienceQ answers questions about a corpus of 50 science explainer videos in English, Spanish, German, French and Portuguese, from channels such as Veritasium, Kurzgesagt, 3Blue1Brown and Terra X Lesch. A user can also paste a YouTube link, and the video is ingested on the spot and becomes searchable.</p>
+    <p>Retrieval runs in two stages. A vector search in Pinecone returns the ten closest transcript passages, a reranker narrows them to the best three, and only those three reach the language model. Answers stream token by token, and each carries its sources as clickable timestamps. Follow-up questions are rewritten against the last five turns, so "and why is that?" is searched as a full question.</p>
+    <p>The question about being a bot is answered by a fixed rule rather than by the model, so the answer is honest every time. The disclosure obligations, and what would trigger new ones, are tracked in the repository's compliance document.</p>
+    <p>Answer quality was scored against a set of test questions for correctness, grounding, conciseness and tone. The repository reports the scores with their limits: the test set grew after the best-scoring run, and that run cannot be reproduced.</p>
+    <p>It started as the final project of the Ironhack AI Engineering course, and I have taken it further since: search across five languages, reranking with Cohere, and the EU AI Act disclosure safeguards. It runs on Google Cloud Run. Try it at <a href="https://scienceq.app">scienceq.app</a>, or read the code on <a href="https://github.com/marcosfsousa/project-ironhack-scienceq">GitHub</a>.</p>
+  </main>
+
+  <footer lang="de">
+    <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutzerklärung</a>
+  </footer>
+
+</body>
+</html>
