@@ -13,8 +13,8 @@
    `blockquote` for quotations. `code` is not post-only. It reaches nine spans on the home
    page as well, three of them inside link text.
 
-   Inherited from #4 and not to be undone: .block, .tail and .end set their vertical
-   padding as longhand. Those three land on the same elements as .row, so a `padding`
+   Inherited from #4 and not to be undone: .block and .end set their vertical
+   padding as longhand. Both land on the same elements as .row, so a `padding`
    shorthand on any of them silently resets the horizontal padding .row establishes —
    which drifts the hero out of column on desktop and puts text against the viewport
    edge on a phone. One bug, two symptoms that look unrelated.
@@ -187,12 +187,6 @@ h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0
 
 .block { padding-top: 2.6rem; padding-bottom: 2.6rem; }
 
-/* The German sentence closes the first screen; it is not the page's second section.
-   No padding above, so the hero's own paragraph rhythm carries it and it reads as the
-   last line of the identity block. The full section gap stays below it, which is what
-   separates the first screen from the exhibit. */
-.block.tail { padding-top: 0; padding-bottom: 1.5rem; }
-
 h2 { font-size: 1.14rem; font-weight: 600; line-height: 1.4; margin: 0 0 1.05rem; }
 
 /* The portfolio heading is typographically subordinate to the exhibit's, which is a
@@ -228,6 +222,12 @@ main {
 }
 main h2 { margin-top: 2.2rem; }
 main h1 + h2 { margin-top: 1.6rem; }
+
+/* Project cards, on /portfolio/ and later the homepage. See docs/DECISIONS.md. */
+.card { padding-top: 1.1rem; padding-bottom: 1.1rem; }
+.card + .card { border-top: 1px solid var(--hair); }
+.card h2 { margin-top: 0; margin-bottom: 0.5rem; }
+.card p:last-child { margin-bottom: 0; }
 
 body > footer {
   max-width: 37rem;
@@ -300,7 +300,6 @@ body > header a { white-space: nowrap; }
 @media (max-width: 40rem) {
   .top { padding-top: 2rem; }
   .block { padding-top: 2rem; padding-bottom: 2rem; }
-  .block.tail { padding-bottom: 1rem; }
   .side { line-height: 1.5; }
   main { padding-top: 2rem; }
   body > header { padding-top: 1rem; }

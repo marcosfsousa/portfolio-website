@@ -37,12 +37,14 @@ Non-technical SME decision-makers first. Whoever lands on the site reads, in non
 | -- | -- |
 | `/` | Homepage, see below |
 | `/portfolio/` | One short card per project, each with one German line on what it means for a business |
-| `/portfolio/<slug>/` | Project page, English: one-line stack, then "What this project shows" (the key technical decisions), then the detail |
+| `/portfolio/<slug>/` | Project page, English: one-line stack, then "What this project shows" (the key technical decisions), then the detail, under a heading of its own (03.11.2026) |
 | `/writing/` | Articles, English |
 | `/impressum/`, `/datenschutz/` | German |
 | `/karte` | Redirect behind the QR code on Marcos's business cards. Target changes only on instruction |
 
-Projects, in this order: ScienceQ (always labelled a demo), JobScout, the MCP authorization server.
+Projects, in this order: ScienceQ, JobScout, the MCP authorization server. ScienceQ and the MCP authorization server are always labelled demos. (03.11.2026)
+
+No PDF project overview on the site. The `/portfolio/` cards and project pages replace `portfolio-referenzprojekte-de.pdf`, which was removed. (03.11.2026)
 
 Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal, Impressum and Datenschutz in the footer.
 
@@ -83,7 +85,6 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 ## Out of scope until decided
 
 - What `/karte` points to, and whether it becomes the website.
-- Whether `site/files/portfolio-referenzprojekte-de.pdf` is kept.
 
 ## Changing this file
 
