@@ -28,10 +28,13 @@
    override.
 
    #15's three rules cannot collide that way, and that was established rather than
-   assumed. Every selector here that sets padding or margin is a class or a
-   non-replaced-element selector — .row, .side, .side.empty, .top, .block, .block.tail,
-   .entry, .end, main, body > footer, h1, h2, h3, p, .capability and the mobile overrides
-   — and not one of them is `code`, `pre` or `blockquote`. No `code`, `pre` or
+   assumed. Every selector here that sets padding or margin, other than #15's own, is a
+   class or a non-replaced-element selector — body, .row, .side, .side.empty, .top,
+   .block, .block.tail, .entry, .entry p, .end, main, main h2, main h1 + h2,
+   body > header, body > footer, .home > header, .home > footer, h1, h2, h3, p,
+   .capability and the mobile overrides — and not one of them is `code`, `pre` or
+   `blockquote`. The list was re-derived from every rule in the file (#24), not patched;
+   a rule that adds padding or margin is added to it. No `code`, `pre` or
    `blockquote` on any served page carries a class attribute at all. So the three land on
    descendants of the padding-setters and never on the same element, and same-element
    collision is what #4's failure mode requires. `pre code` is a different matter and is
