@@ -229,6 +229,12 @@ main {
 main h2 { margin-top: 2.2rem; }
 main h1 + h2 { margin-top: 1.6rem; }
 
+/* Project cards, on /portfolio/ and later the homepage. See docs/DECISIONS.md. */
+.card { padding-top: 1.1rem; padding-bottom: 1.1rem; }
+.card + .card { border-top: 1px solid var(--hair); }
+.card h2 { margin-top: 0; margin-bottom: 0.5rem; }
+.card p:last-child { margin-bottom: 0; }
+
 body > footer {
   max-width: 37rem;
   margin: 2.6rem auto 0;

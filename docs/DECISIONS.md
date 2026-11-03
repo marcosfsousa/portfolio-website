@@ -19,6 +19,13 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - `.end` lost its 8rem bottom padding because the footer below brings its own.
 - **Open:** below 62rem the homepage footer's hairline runs wider than the `.entry` hairlines, edge to edge on a phone. Cosmetic. Raised in the review of #24 and not fixed there.
 
+### Project cards (03.11.2026, #19)
+
+- A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by the same hairline as `.entry`, with no box or background.
+- It is a new class rather than `.entry`. `.entry p` drops paragraph margins, which suits a single sentence, but a card has several paragraphs and needs the normal paragraph rhythm. The homepage keeps `.entry` until #22.
+- `.card h2` resets `main h2`'s top margin, because the card's own top padding already separates it from the card above. `.card h2` outranks `main h2` on specificity.
+- The class works in both layouts, so the homepage „Projekte“ section can reuse it in #22.
+
 ## Padding collisions
 
 ### `code`, `pre` and `blockquote` never share an element with a padding rule (#15, restated 03.11.2026, #24)

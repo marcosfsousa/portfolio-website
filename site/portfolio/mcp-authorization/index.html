@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP authorization server (demo) — Marcos Sousa</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav lang="de" aria-label="Hauptnavigation">
+      <a href="/">Start</a> · <a href="/portfolio/">Portfolio</a> · <a href="/writing/">Artikel</a> · <a href="/#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>MCP authorization server (demo)</h1>
+
+    <p>Python 3.13 · MCP over Streamable HTTP · FastAPI · PyJWT · PostgreSQL · Keycloak 26.7.1 · Docker Compose</p>
+
+    <h2>What this project shows</h2>
+    <ul>
+      <li>An external authorization server, Keycloak, with the MCP server as a strict resource server. Every token is validated in the server's own code (signature, issuer, expiry, audience) against the published key set, and every failure closes.</li>
+      <li>A token is a ceiling on what an application may do, never a statement of what the person may do. Three coarse scopes meet roles the server resolves per request, and every call is decided by the intersection.</li>
+      <li>The shape of a refusal follows its remedy. A tool the token cannot reach is absent from the listing, scope without the role is a protocol error, and a segregation-of-duties breach is a domain rejection.</li>
+      <li>The authorization layer is portable: the purchase-to-pay domain can be deleted without untangling it, and the layer's tests run with the domain deleted.</li>
+    </ul>
+
+    <h2>An MCP server where authorization is the subject</h2>
+    <p>An MCP server over a mock purchase-to-pay ERP. Two callers ask the same endpoint the same question and get different answers. A tool a caller may not reach is absent rather than refused. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/walkthrough.md"><code>docs/walkthrough.md</code></a> follows one from the login screen onward, every wire exchange copied from a capture a test checks it against. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/walkthrough.md#what-this-cost">What this cost</a> counts fifty-one commits of documentation before the first line of Python, and what running code did to that design.</p>
+    <p>Keycloak is the authorization server, and a client it provisions from a hosted metadata document inherits no PKCE pin. It arrives accepting <code>plain</code> while every authored client in the realm pins <code>S256</code>. The obvious repair is inert, because a profile is only as reachable as its policy's condition, and conditions are per-event. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/keycloak/README.md#what-a-hosted-identity-document-costs-the-realm"><code>keycloak/README.md</code></a> has both, checked against Keycloak 26.7.1.</p>
+    <p>Every client above is one I wrote. The <a href="https://github.com/marcosfsousa/mcp-erp/releases/download/v1.0.0/recording.mp4">recording</a> is not. 90 seconds, no audio, of Claude Code driving this server, with <code>claude.ai</code> as the <code>client_id</code> on the consent screen. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/normative-register.md"><code>docs/normative-register.md</code></a> lists every <code>MUST</code> and <code>SHOULD</code> the project departs from.</p>
+  </main>
+
+  <footer lang="de">
+    <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutzerklärung</a>
+  </footer>
+
+</body>
+</html>
