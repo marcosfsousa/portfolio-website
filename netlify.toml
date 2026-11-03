@@ -5,3 +5,8 @@
   from = "/karte"
   to = "https://scienceq.app"
   status = 302
+
+[[redirects]]
+  from = "/files/portfolio-referenzprojekte-de.pdf"
+  to = "/portfolio/"
+  status = 301
