@@ -2,13 +2,11 @@
    Promoted from prototype/visual-form/variant-d.html (issue #4, variant D "Marginalia").
    Hand-written. No build step, no @font-face, no @import, no third-party request.
 
-   Two layouts share these tokens:
-     - the home page: a margin column of section labels beside a reading column;
-     - the subpages (Impressum, Datenschutzerklärung, /writing/): one reading column,
-       <header> + <main> + <footer>, no grid.
-   Every page, the home page included, carries the same <header> (the German nav) and the
-   same <footer> (the two legal links), byte for byte (#18). The home page aligns them
-   with its reading column through `body.home`, not through different markup.
+   Two layouts: the home page (margin labels beside a reading column) and the subpages
+   (one reading column, no grid).
+
+   Every page carries the same <header> and <footer>; `body.home` aligns them on the
+   home page.
 
    A third thing the file does, and the only part of it that is not layout: the post-body
    element rules added by #15 — `code` for inline identifiers, `pre` for block-level code,
@@ -27,19 +25,8 @@
    inherit none of it. Adding a fourth is safe only if you can say which rule it would
    override.
 
-   #15's three rules cannot collide that way, and that was established rather than
-   assumed. Every selector here that sets padding or margin, other than #15's own, is a
-   class or a non-replaced-element selector — body, .row, .side, .side.empty, .top,
-   .block, .block.tail, .entry, .entry p, .end, main, main h2, main h1 + h2,
-   body > header, body > footer, .home > header, .home > footer, h1, h2, h3, p,
-   .capability and the mobile overrides — and not one of them is `code`, `pre` or
-   `blockquote`. The list was re-derived from every rule in the file (#24), not patched;
-   a rule that adds padding or margin is added to it. No `code`, `pre` or
-   `blockquote` on any served page carries a class attribute at all. So the three land on
-   descendants of the padding-setters and never on the same element, and same-element
-   collision is what #4's failure mode requires. `pre code` is a different matter and is
-   not optional: `code` is an element selector, so it reaches `pre > code` too, and the
-   reset is what keeps inline padding and weight off every line of a code block.
+   #15's code, pre and blockquote never share an element with a padding or margin rule,
+   so that collision can't reach them. Why: docs/DECISIONS.md.
 
    The mobile media query stays last in the file for the same failure mode: written
    earlier, a later base rule overrides it with no error anywhere. */
@@ -183,9 +170,7 @@ blockquote p:last-child { margin-bottom: 0; }
    characters at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. Browser-measured 67.3. */
 .col { max-width: 37rem; }
 
-/* No band. Above the identity block sits only the one-line nav, in the footer's quiet
-   type; the padding is reduced from 3.5rem by roughly the nav's height so the name
-   lands about where it did before the nav existed. */
+/* 3.5rem less the nav's height, so the name sits where it did before the nav. */
 .top { padding-top: 2.5rem; }
 h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0.005em; }
 
@@ -228,14 +213,12 @@ h3 {
 .entry + .entry { border-top: 1px solid var(--hair); }
 .entry p { margin: 0; }
 
-/* Bottom padding 0: the shared footer follows and brings its own 8rem. Longhand, per the
-   collision note at the top of the file. */
+/* No bottom padding: the footer below brings its own. Longhand, per the note at the top. */
 .end { padding-top: 2.6rem; padding-bottom: 0; font-size: 0.9rem; color: var(--quiet); }
 
 /* ---- subpages: Impressum, Datenschutzerklärung, /writing/ --------------- */
 
-/* Same measure and same gutter as .row, reached without the grid. These pages carry no
-   margin labels; the shared header above <main> is their only navigation. */
+/* Same measure and gutter as .row, without the grid. */
 main {
   max-width: 37rem;
   margin: 0 auto;
@@ -273,14 +256,8 @@ body > header {
 }
 body > header a { white-space: nowrap; }
 
-/* Home page: header and footer start where the reading column starts. Below 62rem the
-   grid is one column 55rem wide, so they take that width. From 62rem the column starts
-   at 50% - 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap)
-   = 50% - 11.5rem, and the box becomes the column exactly: no side padding, 37rem wide.
-   That puts the footer's hairline on the same span as the .entry hairlines above it;
-   with the subpage padding kept it would sit 1.5rem left of them. Rendered and measured
-   at 1280px: nav, h1, footer text and both hairlines all start at x=456.
-   `.home > x` outranks `body > x` on specificity, so source order does not matter here. */
+/* Home page: header and footer match the reading column, which from 62rem starts at
+   50% - 11.5rem. See docs/DECISIONS.md. */
 .home > header, .home > footer { max-width: 55rem; }
 @media (min-width: 62rem) {
   .home > header, .home > footer {
