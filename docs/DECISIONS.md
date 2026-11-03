@@ -26,6 +26,10 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - `.card h2` resets `main h2`'s top margin, because the card's own top padding already separates it from the card above. `.card h2` outranks `main h2` on specificity.
 - The class works in both layouts, so the homepage „Projekte“ section can reuse it in #22.
 
+### No `.tail` (03.11.2026)
+
+`.block.tail` styled the homepage row that linked to the German PDF. The PDF and that row were removed (see `CLAUDE.md`, Structure), and the rule went with them.
+
 ## Padding collisions
 
 ### `code`, `pre` and `blockquote` never share an element with a padding rule (#15, restated 03.11.2026, #24)

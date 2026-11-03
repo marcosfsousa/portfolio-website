@@ -44,6 +44,8 @@ Non-technical SME decision-makers first. Whoever lands on the site reads, in non
 
 Projects, in this order: ScienceQ, JobScout, the MCP authorization server. ScienceQ and the MCP authorization server are always labelled demos. (03.11.2026)
 
+No PDF project overview on the site. The `/portfolio/` cards and project pages replace `portfolio-referenzprojekte-de.pdf`, which was removed. (03.11.2026)
+
 Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal, Impressum and Datenschutz in the footer.
 
 ## Homepage
@@ -83,7 +85,6 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 ## Out of scope until decided
 
 - What `/karte` points to, and whether it becomes the website.
-- Whether `site/files/portfolio-referenzprojekte-de.pdf` is kept.
 
 ## Changing this file
 
