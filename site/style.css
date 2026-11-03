@@ -25,8 +25,8 @@
    inherit none of it. Adding a fourth is safe only if you can say which rule it would
    override.
 
-   #15's code, pre and blockquote never share an element with a padding or margin rule,
-   so that collision can't reach them. Why: docs/DECISIONS.md.
+   Only their own rules set padding or margin on #15's code, pre and blockquote, so that
+   collision can't reach them. Why: docs/DECISIONS.md.
 
    The mobile media query stays last in the file for the same failure mode: written
    earlier, a later base rule overrides it with no error anywhere. */
@@ -170,7 +170,7 @@ blockquote p:last-child { margin-bottom: 0; }
    characters at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. Browser-measured 67.3. */
 .col { max-width: 37rem; }
 
-/* 3.5rem less the nav's height, so the name sits where it did before the nav. */
+/* Down from 3.5rem. With the nav above, the name sits about 2rem lower than before. */
 .top { padding-top: 2.5rem; }
 h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0.005em; }
 

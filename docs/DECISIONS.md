@@ -12,10 +12,11 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - No `aria-current` on the nav: it would make the markup differ per page.
 - The homepage aligns header and footer with its reading column through `body.home`, not through different markup.
   - Below 62rem the grid is one column, 55rem wide with 1.5rem side padding, so header and footer take `max-width: 55rem`.
-  - From 62rem the reading column starts at 50% − 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap) = **50% − 11.5rem**. There the box becomes the column exactly: 37rem wide, no side padding. That puts the footer's hairline on the same span as the `.entry` hairlines. With the subpage padding kept, it would start 1.5rem to their left.
+  - From 62rem the reading column starts at 50% − 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap) = **50% − 11.5rem**. There the box becomes the column exactly: 37rem wide, no side padding. That puts the footer's hairline on the same span as the `.entry` hairlines. Keeping the subpage padding would have needed the box 1.5rem further left to line the text up, and its hairline would then start 1.5rem left of theirs.
   - Measured at 1280px in headless Chrome: nav, h1, footer text and all hairlines start at x=456, and the hairlines span 456–1047.
   - `.home > header` outranks `body > header` on specificity, so source order does not matter between them.
-- Spacing absorbs the nav. `.top` and `main` top padding went from 3.5rem to 2.5rem (2rem on mobile), so the first heading sits about where it did before. `.end` lost its 8rem bottom padding because the footer below brings its own.
+- Spacing with the nav. `.top` and `main` top padding went from 3.5rem to 2.5rem, and on mobile from 2.5rem to 2rem. The nav is its top padding plus one 0.9rem line at line-height 1.7 (≈24.5px). That's ≈48.5px on desktop (1.5rem padding) and ≈40.5px on mobile (1rem). So the first heading sits about 2rem (≈32px) lower than before on both. That was kept on purpose (option (a) in the review of #24).
+- `.end` lost its 8rem bottom padding because the footer below brings its own.
 - **Open:** below 62rem the homepage footer's hairline runs wider than the `.entry` hairlines, edge to edge on a phone. Cosmetic. Raised in the review of #24 and not fixed there.
 
 ## Padding collisions
