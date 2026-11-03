@@ -57,7 +57,7 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 - Same header and footer on every page. The footer links Impressum and Datenschutzerklärung.
 - A change to the header or footer is made on every page in the same change.
 - Before every push: check all pages for header, footer, both legal links, `lang`, and „(englisch)“ markers.
-- After every deploy: check the served HTML of every page. It contains no `<script>` tags and nothing injected by Netlify. Checking the repo is not enough. (03.11.2026)
+- After every production deploy: check the served HTML of every page on marcossousa.de. It contains no `<script>` tags and nothing injected by Netlify. Checking the repo is not enough. (03.11.2026)
 
 ## Text
 
