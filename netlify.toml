@@ -1,24 +1,5 @@
-# Repo files that are not part of the site. Netlify publishes the repo root, so without
-# these rules they are served. Forced 404: force = true wins over the existing file.
-# Matching is case-insensitive (/claude.md was served too). A new non-site file in the
-# repo needs its own rule here.
-[[redirects]]
-  from = "/CLAUDE.md"
-  to = "/404"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/README.md"
-  to = "/404"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/netlify.toml"
-  to = "/404"
-  status = 404
-  force = true
+[build]
+  publish = "site"
 
 [[redirects]]
   from = "/karte"
