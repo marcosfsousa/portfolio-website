@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JobScout — Marcos Sousa</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav lang="de" aria-label="Hauptnavigation">
+      <a href="/">Start</a> · <a href="/portfolio/">Portfolio</a> · <a href="/writing/">Artikel</a> · <a href="/#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>JobScout</h1>
+
+    <p>Python 3.11 · httpx · pydantic · SQLite · sentence-transformers · Claude Haiku · Resend · GitHub Actions</p>
+
+    <h2>What this project shows</h2>
+    <ul>
+      <li>Rules first, model last. Deterministic filters remove obvious mismatches before any model is called, a local embedding model ranks what is left, and the language model evaluates only the strongest candidates. The cost of an LLM call is paid only where it adds judgement.</li>
+      <li>Multilingual ranking without translation. About 80% of the listings are German. An English profile and a German listing land in the same vector space, so ranking needs no translation step.</li>
+      <li>A pipeline that runs unattended. It runs daily on a schedule, is idempotent, and fails loudly when the source's yield collapses, so an empty inbox is never mistaken for a quiet market.</li>
+    </ul>
+
+    <h2>How it works</h2>
+    <p>JobScout finds freelance AI and ML projects in the German market. Every day it pulls new listings from a German freelance marketplace, keeps the few worth a closer look, and sends them by email with a markdown archive beside it. It finds and ranks; it never applies to anything.</p>
+    <p>The pipeline runs in six stages: ingest, deduplicate, hard filter, embed and rank, evaluate, deliver. Each listing is normalised into one internal record (rate, contract type, remote share, duration). Duplicates are recognised by a fingerprint of their content rather than by the source's IDs, which are not stable. Ranking uses the multilingual-e5-small model, run locally.</p>
+    <p>Claude Haiku scores only the top slice of the ranking, and only listings above a configurable score reach the inbox. Review labels such as applied, rejected and interested are stored in SQLite and shape future ranking. Preferences live in one profile file, the single source of truth for what counts as a match.</p>
+    <p>Sources are adapters behind one interface: a new market is a new adapter file, and nothing else in the pipeline changes. GitHub Actions runs the pipeline every day, with its SQLite state kept in the cache rather than committed. About 290 tests cover the adapter, the filters, ranking, storage, delivery and the edge cases.</p>
+    <p>The code is on <a href="https://github.com/marcosfsousa/agentic-job-hunter">GitHub</a>.</p>
+  </main>
+
+  <footer lang="de">
+    <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutzerklärung</a>
+  </footer>
+
+</body>
+</html>
