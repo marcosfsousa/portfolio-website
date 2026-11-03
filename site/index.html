@@ -20,7 +20,12 @@
 <title>Marcos Sousa</title>
 <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body class="home">
+  <header>
+    <nav lang="de" aria-label="Hauptnavigation">
+      <a href="/">Start</a> · <a href="/writing/">Artikel</a> · <a href="/#kontakt">Kontakt</a>
+    </nav>
+  </header>
 
   <div class="row top">
     <div class="side empty" aria-hidden="true"></div>
@@ -64,13 +69,16 @@
     <div class="col"><p><a href="/writing/keycloak-provisioned-client-no-pkce-pin/">A provisioned Keycloak client inherits no PKCE pin, and the obvious fix is inert</a> — what a hosted metadata document costs a realm, checked against Keycloak 26.7.1. <a href="/writing/">Index</a>.</p></div>
   </div>
 
-  <div class="row end">
+  <div class="row end" id="kontakt">
     <div class="side">Contact</div>
     <div class="col">
-      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a><br>
-      <a lang="de" href="/impressum/">Impressum</a> · <a lang="de" href="/datenschutz/">Datenschutzerklärung</a></p>
+      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a></p>
     </div>
   </div>
+
+  <footer lang="de">
+    <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutzerklärung</a>
+  </footer>
 
 </body>
 </html>

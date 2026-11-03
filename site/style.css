@@ -5,7 +5,10 @@
    Two layouts share these tokens:
      - the home page: a margin column of section labels beside a reading column;
      - the subpages (Impressum, Datenschutzerklärung, /writing/): one reading column,
-       plain <main> + <footer>, no grid.
+       <header> + <main> + <footer>, no grid.
+   Every page, the home page included, carries the same <header> (the German nav) and the
+   same <footer> (the two legal links), byte for byte (#18). The home page aligns them
+   with its reading column through `body.home`, not through different markup.
 
    A third thing the file does, and the only part of it that is not layout: the post-body
    element rules added by #15 — `code` for inline identifiers, `pre` for block-level code,
@@ -177,8 +180,10 @@ blockquote p:last-child { margin-bottom: 0; }
    characters at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. Browser-measured 67.3. */
 .col { max-width: 37rem; }
 
-/* No band. The top of the page is simply the top of the page. */
-.top { padding-top: 3.5rem; }
+/* No band. Above the identity block sits only the one-line nav, in the footer's quiet
+   type; the padding is reduced from 3.5rem by roughly the nav's height so the name
+   lands about where it did before the nav existed. */
+.top { padding-top: 2.5rem; }
 h1 { font-size: 1.42rem; font-weight: 600; margin: 0 0 1.3rem; letter-spacing: 0.005em; }
 
 /* Condition 3a. One step above the availability line beneath it — size and space, not
@@ -220,18 +225,20 @@ h3 {
 .entry + .entry { border-top: 1px solid var(--hair); }
 .entry p { margin: 0; }
 
-.end { padding-top: 2.6rem; padding-bottom: 8rem; font-size: 0.9rem; color: var(--quiet); }
+/* Bottom padding 0: the shared footer follows and brings its own 8rem. Longhand, per the
+   collision note at the top of the file. */
+.end { padding-top: 2.6rem; padding-bottom: 0; font-size: 0.9rem; color: var(--quiet); }
 
 /* ---- subpages: Impressum, Datenschutzerklärung, /writing/ --------------- */
 
 /* Same measure and same gutter as .row, reached without the grid. These pages carry no
-   margin labels: there is nothing to navigate. */
+   margin labels; the shared header above <main> is their only navigation. */
 main {
   max-width: 37rem;
   margin: 0 auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  padding-top: 3.5rem;
+  padding-top: 2.5rem;
 }
 main h2 { margin-top: 2.2rem; }
 main h1 + h2 { margin-top: 1.6rem; }
@@ -248,6 +255,38 @@ body > footer {
   border-top: 1px solid var(--hair);
 }
 body > footer a { white-space: nowrap; }
+
+/* ---- shared header: the nav, on every page (#18) ----------------------- */
+
+/* The footer's box and type, at the top, without the hairline. */
+body > header {
+  max-width: 37rem;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--quiet);
+}
+body > header a { white-space: nowrap; }
+
+/* Home page: header and footer start where the reading column starts. Below 62rem the
+   grid is one column 55rem wide, so they take that width. From 62rem the column starts
+   at 50% - 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap)
+   = 50% - 11.5rem, and the box becomes the column exactly: no side padding, 37rem wide.
+   That puts the footer's hairline on the same span as the .entry hairlines above it;
+   with the subpage padding kept it would sit 1.5rem left of them. Rendered and measured
+   at 1280px: nav, h1, footer text and both hairlines all start at x=456.
+   `.home > x` outranks `body > x` on specificity, so source order does not matter here. */
+.home > header, .home > footer { max-width: 55rem; }
+@media (min-width: 62rem) {
+  .home > header, .home > footer {
+    max-width: 37rem;
+    margin-left: calc(50% - 11.5rem);
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 
 /* ---- mobile: stays last in the file ------------------------------------ */
 
@@ -279,10 +318,11 @@ body > footer a { white-space: nowrap; }
    at no cost to measure at all. `pre` keeps its indent: its lines scroll rather than
    wrap, so measure is not a constraint on it. */
 @media (max-width: 40rem) {
-  .top { padding-top: 2.5rem; }
+  .top { padding-top: 2rem; }
   .block { padding-top: 2rem; padding-bottom: 2rem; }
   .block.tail { padding-bottom: 1rem; }
   .side { line-height: 1.5; }
-  main { padding-top: 2.5rem; }
+  main { padding-top: 2rem; }
+  body > header { padding-top: 1rem; }
   blockquote { padding-left: 0; border-left: 0; }
 }
