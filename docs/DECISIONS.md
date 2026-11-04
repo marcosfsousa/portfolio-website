@@ -30,7 +30,7 @@ Each entry carries its date and issue. A changed decision is edited in place and
 
 ### Project cards (03.11.2026, #19)
 
-- A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by the same hairline as `.entry`, with no box or background.
+- A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by a 1px hairline in `--hair`, as the footer is, with no box or background.
 - It is a new class rather than `.entry`. `.entry p` dropped paragraph margins, which suited a single sentence, but a card has several paragraphs and needs the normal paragraph rhythm. `.entry` was removed with the old homepage (04.11.2026, #22).
 - `.card h2` resets `main h2`'s top margin, because the card's own top padding already separates it from the card above. `.card h2` outranks `main h2` on specificity.
 - The class works in both layouts. The homepage „Projekte“ section reuses it (04.11.2026, #22). There the card title is an `h3`, because the section heading is the `h2`. `h3` has the same size as `h2` (1.14rem), so a card looks the same on both pages.
@@ -61,7 +61,7 @@ The rule is about that collision, not about shorthands as such. `.side.empty { p
 
 ### `code`, `pre` and `blockquote` never share an element with a padding rule (#15, restated 03.11.2026, #24)
 
-The collision the top of `style.css` warns about needs two padding rules on the same element. #15's three rules are safe from it because of two properties:
+The collision described under "`.row` owns the horizontal padding" needs two padding rules on the same element. #15's three rules are safe from it because of two properties:
 
 - No rule that sets padding or margin targets `code`, `pre` or `blockquote`, apart from those elements' own rules.
 - No `code`, `pre` or `blockquote` on a served page carries a class.
@@ -72,7 +72,13 @@ Check it by pulling every rule from `site/style.css` that sets `padding*` or `ma
 
 ### The `pre code` reset (#15)
 
-`code` is an element selector, so it also reaches the `code` inside `pre`. Without the `pre code` reset, every line of a code block would get the inline 0.15em padding and the 500 weight. The reason for `inherit` in that rule is in the comment above `pre`.
+`code` is an element selector, so it also reaches the `code` inside `pre`. Without the `pre code` reset, every line of a code block would get the inline 0.15em padding and the 500 weight. In `pre code`, `inherit` does specific work in both places. `font-size: inherit` takes `pre`'s already-computed size, where `0.84em` would multiply against it and give 0.71em. `font-weight: inherit` reaches past `code` to `pre`, which sets none, so the weight is the body's.
+
+### `pre` (#15, moved here from `style.css` 04.11.2026, #22)
+
+- `pre` scrolls itself rather than the page, so a long line never widens the viewport. Its left hairline is the site's `--hair`, like the footer and the cards.
+- No background under `pre` or `blockquote`. No downloaded code face and no highlighter library: condition 8 and the stack rule out Prism, highlight.js and every `@font-face` code face permanently.
+- Both were written for the write-ups before any page used them. The Keycloak post now has one `pre` and one `blockquote`.
 
 ## Mobile
 
@@ -82,7 +88,7 @@ The `max-width: 40rem` query stays last in `style.css`. Written earlier, a later
 
 ### Section spacing (#4)
 
-On a phone the margin labels stack above their text instead of sitting beside it, and section gaps of 2.6rem are too generous on a 390px screen. So `.top`, `.block` and `main` take less top padding, and `.side` a tighter line height. Measured in #4: `prototype/align-check.html`.
+On a phone the margin labels stack above their text instead of sitting beside it, and section gaps of 2.6rem are too generous on a 390px screen. So `.top`, `.block` and `main` take less top padding, and `.side` a tighter line height. Measured in #4 with `prototype/visual-form/align-check.html`, which is on the branch `prototype/issue-4-visual-form` (commit `a83f1f8`), not on `main`.
 
 ### Type size stays 18.5px (#4, #15)
 

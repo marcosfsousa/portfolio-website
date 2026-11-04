@@ -69,17 +69,7 @@ code {
 }
 p { margin: 0 0 1.1rem; }
 
-/* Nothing served uses `pre` or `blockquote` yet; both are for the second write-up and are
-   speculative by design. `pre` scrolls itself rather than the page, so a long line never
-   widens the viewport, and it carries the same hairline the entries and the footer
-   already use. No background under either element, and no downloaded code face and no
-   highlighter library: condition 8 and the stack rule out Prism, highlight.js and every
-   @font-face code face permanently.
-
-   In `pre code`, `inherit` is doing specific work in both places and neither is
-   decorative: `font-size: inherit` takes `pre`'s already-computed size, where `0.84em`
-   would multiply against it and give 0.71em; `font-weight: inherit` reaches past `code`
-   to `pre`, which sets none, so the weight is the body's. */
+/* Code blocks scroll themselves, not the page. Reasons, and why `pre code` inherits: docs/DECISIONS.md, `pre` (#15). */
 pre {
   font-family: var(--mono);
   font-size: 0.84em;
