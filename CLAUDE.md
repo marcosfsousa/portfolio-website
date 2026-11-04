@@ -17,6 +17,14 @@ Netlify, deployed on push to `main`. No build step.
 - No client-side analytics, trackers or cookies. Netlify's server-side Web Analytics stays as configured in the Netlify dashboard; nothing else measures visits. (03.11.2026)
 - No theme toggle. No photo.
 - No external resources: no third-party scripts, embeds, fonts, form endpoints or Netlify Functions. Each one changes the Datenschutzerklärung and Marcos's provider list, so none is added to solve a task. Stop and ask.
+- Exception (decided 03.11.2026, recorded 04.11.2026): the opt-in page `/ki-check/` may submit one form to Brevo (Brevo SAS, Paris). This applies to that page only.
+  - The form is Brevo's "Simple HTML" embed: a plain HTML form that posts directly to Brevo. No Brevo scripts, fonts or stylesheets (`sib-styles.css` removed), no other external resources on page load, no cookies. Loading the page makes no request to Brevo.
+  - Styling is the site's own CSS. The honeypot field `email_address_check` is hidden by our CSS.
+  - The form validates the email itself (`type="email"`, `required`, a `pattern` that requires a dot in the domain), because Brevo answers invalid input with raw JSON on its own domain.
+  - `locale` is set to `de`.
+  - After submit, Brevo redirects to our own thank-you page. The link in the confirmation email leads to our own confirmation page.
+  - Rejected: Brevo's embed with scripts (loads third-party resources on page view) and a Netlify Function (own code, and Netlify would then process the form data).
+  - Any other form, endpoint or external resource still falls under the general rule: stop and ask.
 - Netlify publishes only `site/` (`publish = "site"` in `netlify.toml`). Everything served lives under `site/`; files outside it, such as `CLAUDE.md` and `README.md`, are never served. (03.11.2026)
 - Keep it small. The result matters, not the machinery.
 
