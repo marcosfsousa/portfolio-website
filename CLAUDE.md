@@ -90,9 +90,6 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 - A longer hero, or a second hero line.
 - „vor Ort in Bayern“.
 
-## Out of scope until decided
-
-
 ## Changing this file
 
 Only on Marcos's instruction. A changed rule gets the date of the change next to it.
