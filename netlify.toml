@@ -3,7 +3,7 @@
 
 [[redirects]]
   from = "/karte"
-  to = "https://scienceq.app"
+  to = "/"
   status = 302
 
 [[redirects]]

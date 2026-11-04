@@ -1,27 +1,15 @@
 <!DOCTYPE html>
-<!-- marcossousa.de. Hand-written HTML, one same-origin stylesheet, no script.
-
-     Copy is verbatim from the copy tickets and is not edited here: the first screen and
-     the exhibit section from issue #5, the three portfolio entries from issue #6. Visual
-     form is issue #4's variant D, promoted from prototype/visual-form/variant-d.html.
-
-     The five links into mcp-erp are pinned to the tag v1.0.0 rather than main. Two of
-     them carry anchors generated from headings in a repository this one does not control
-     (#what-this-cost, #what-a-hosted-identity-document-costs-the-realm); on main, renaming
-     either heading rots the link silently — the page still loads, the browser ignores the
-     unknown anchor, and the reader lands at the top of a long document with nothing
-     reporting an error. The tag is enforced by the URL rather than by a convention held in
-     another repository. Accepted cost, recorded in #8: the linked prose stops tracking
-     mcp-erp's main branch. -->
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marcos Sousa</title>
+<title>Marcos Sousa Software- und KI-Entwicklung</title>
+<meta name="description" content="Ich helfe kleinen und mittleren Unternehmen, KI dort einzusetzen, wo sie sich lohnt. Softwareentwicklung mit Schwerpunkt KI aus Buttenwiesen.">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body class="home">
   <header>
+    <a class="name" href="/">Marcos Sousa</a>
     <nav lang="de" aria-label="Hauptnavigation">
       <a href="/">Start</a> · <a href="/portfolio/">Portfolio</a> · <a href="/writing/">Artikel</a> · <a href="/#kontakt">Kontakt</a>
     </nav>
@@ -30,41 +18,70 @@
   <div class="row top">
     <div class="side empty" aria-hidden="true"></div>
     <div class="col">
-      <h1>Marcos Sousa</h1>
-      <p class="capability">Python backend engineer building LLM applications — RAG pipelines, agentic workflows, and Model Context Protocol servers with OAuth 2.0 / OpenID Connect / RBAC authorization.</p>
-      <p>Available for remote freelance contracts with clients in Germany and the EU.</p>
-      <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a></p>
+      <h1>Ich helfe Unternehmen, KI dort einzusetzen, wo sie sich lohnt.</h1>
     </div>
   </div>
 
   <div class="row block">
-    <div class="side">Exhibit</div>
+    <h2 class="side">Typische Ansatzpunkte</h2>
     <div class="col">
-      <h2>An MCP server where authorization is the subject</h2>
-      <p>An MCP server over a mock purchase-to-pay ERP. Two callers ask the same endpoint the same question and get different answers. A tool a caller may not reach is absent rather than refused. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/walkthrough.md"><code>docs/walkthrough.md</code></a> follows one from the login screen onward, every wire exchange copied from a capture a test checks it against. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/walkthrough.md#what-this-cost">What this cost</a> counts fifty-one commits of documentation before the first line of Python, and what running code did to that design.</p>
-      <p>Keycloak is the authorization server, and a client it provisions from a hosted metadata document inherits no PKCE pin. It arrives accepting <code>plain</code> while every authored client in the realm pins <code>S256</code>. The obvious repair is inert, because a profile is only as reachable as its policy's condition, and conditions are per-event. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/keycloak/README.md#what-a-hosted-identity-document-costs-the-realm"><code>keycloak/README.md</code></a> has both, checked against Keycloak 26.7.1.</p>
-      <p>Every client above is one I wrote. The <a href="https://github.com/marcosfsousa/mcp-erp/releases/download/v1.0.0/recording.mp4">recording</a> is not. 90 seconds, no audio, of Claude Code driving this server, with <code>claude.ai</code> as the <code>client_id</code> on the consent screen. <a href="https://github.com/marcosfsousa/mcp-erp/blob/v1.0.0/docs/normative-register.md"><code>docs/normative-register.md</code></a> lists every <code>MUST</code> and <code>SHOULD</code> the project departs from.</p>
+      <p>KI kann besonders dort entlasten, wo Ihre Mitarbeiter viel Zeit mit der Suche nach Informationen oder mit wiederkehrenden Aufgaben verbringen. Zwei Beispiele:</p>
+      <h3>Antworten aus Ihren eigenen Unterlagen</h3>
+      <p>Ein Assistent beantwortet Fragen Ihrer Mitarbeiter aus Handbüchern, Verträgen oder Richtlinien und belegt jede Antwort mit der Quelle. Ein Servicetechniker fragt vor Ort: „Welches Anzugsmoment gilt bei Baureihe X?“ Die Antwort kommt aus dem Handbuch, mit Seitenangabe.</p>
+      <h3>Routinearbeit automatisieren</h3>
+      <p>Arbeit, die jeden Tag gleich abläuft, nur mit anderen Daten, bereitet die KI vor. Eine Angebotsanfrage kommt per E-Mail. Die KI liest sie, gleicht sie mit dem Produktkatalog ab und bereitet einen Angebotsentwurf vor. Ein Mitarbeiter prüft ihn und schickt ihn ab.</p>
+      <p>Wo Ihre Daten liegen dürfen, legen wir am Anfang fest.</p>
     </div>
   </div>
 
   <div class="row block">
-    <div class="side">Portfolio</div>
+    <h2 class="side">So fangen wir an</h2>
     <div class="col">
-      <h3>Where these patterns apply</h3>
-      <div class="entry"><p>Delegated authorization is needed the moment an AI assistant reaches a CRM, a ticket system, any internal system, because what it returns has to stay inside the entitlements of the person it acts for.</p></div>
-      <div class="entry"><p><a href="https://scienceq.app">ScienceQ</a> answers from a multilingual video corpus with sources attached — what internal knowledge systems need under raised data-protection rules — and declares itself an AI before you type a question, while Art. 50 of the EU AI Act obliges every customer-facing AI system to disclose its nature.</p></div>
-      <div class="entry"><p>Pre-sorting unstructured input at volume is the same job wherever it appears — <a href="https://github.com/marcosfsousa/agentic-job-hunter">JobScout</a> runs deterministic rules over the whole daily stream of listings and pays a model only for what survives them.</p></div>
+      <p>Wir beginnen mit einem kostenlosen Erstgespräch von 30 Minuten. Sie erzählen mir, wo bei Ihnen Zeit verloren geht, und ich sage Ihnen, ob sich KI dafür lohnt.</p>
+      <p>Wenn ja, fangen wir klein an: ein Bereich, ein Dokumentenbestand, klare Abnahmekriterien. Danach entscheiden Sie, ob es weitergeht.</p>
+      <p>Remote, vor Ort nach Absprache.</p>
+      <p><a href="#kontakt">Erstgespräch vereinbaren</a></p>
     </div>
   </div>
 
   <div class="row block">
-    <div class="side">Writing</div>
-    <div class="col"><p><a href="/writing/keycloak-provisioned-client-no-pkce-pin/">A provisioned Keycloak client inherits no PKCE pin, and the obvious fix is inert</a> — what a hosted metadata document costs a realm, checked against Keycloak 26.7.1. <a href="/writing/">Index</a>.</p></div>
+    <h2 class="side">Über mich</h2>
+    <div class="col">
+      <p>Ich bin Marcos, Softwareentwickler in Buttenwiesen bei Augsburg. Bevor ich mich auf KI spezialisiert habe, war ich zweieinhalb Jahre bei der asioso GmbH in München und habe Webanwendungen für große Unternehmenskunden entwickelt. Dabei hatte ich die technische Leitung inne: Ich habe Architekturentscheidungen getroffen, die Arbeit im Team geprüft und war für die Kunden der technische Ansprechpartner.</p>
+      <p>Heute entwickle ich KI-Anwendungen vom ersten Prototyp bis zum produktiven Einsatz. Ich teste jedes System mit echten Fragen und messe, wie oft die Antwort stimmt, bevor sich jemand darauf verlässt. Datenschutz und die Transparenzpflichten der EU-KI-Verordnung sind von Anfang an Teil der Planung.</p>
+    </div>
+  </div>
+
+  <div class="row block">
+    <h2 class="side">Projekte</h2>
+    <div class="col">
+      <div class="card">
+        <h3>ScienceQ (Demo)</h3>
+        <p>Beantwortet Fragen zu Wissenschaftsvideos und zeigt die genaue Stelle im Video als Beleg.</p>
+        <p><em>Für Ihr Unternehmen:</em> Antworten aus Ihren Handbüchern und Verträgen, mit Quelle.</p>
+        <p><a href="/portfolio/scienceq/">Details (englisch)</a></p>
+      </div>
+
+      <div class="card">
+        <h3>JobScout</h3>
+        <p>Prüft jeden Tag neue Projektausschreibungen, filtert und ordnet sie und lässt nur die besten Treffer von einer KI bewerten.</p>
+        <p><em>Für Ihr Unternehmen:</em> Große Mengen eingehender Dokumente oder Anfragen vorsortieren, mit KI nur dort, wo sie sich lohnt.</p>
+        <p><a href="/portfolio/jobscout/">Details (englisch)</a></p>
+      </div>
+
+      <div class="card">
+        <h3>MCP-Autorisierungsserver (Demo)</h3>
+        <p>Ein KI-Assistent arbeitet mit einem nachgebauten Einkaufssystem und sieht nur, was der angemeldete Nutzer sehen darf.</p>
+        <p><em>Für Ihr Unternehmen:</em> KI auf Ihrem ERP oder CRM, die Ihre Zugriffsrechte einhält.</p>
+        <p><a href="/portfolio/mcp-authorization/">Details (englisch)</a></p>
+      </div>
+    </div>
   </div>
 
   <div class="row end" id="kontakt">
-    <div class="side">Contact</div>
+    <h2 class="side">Kontakt</h2>
     <div class="col">
+      <p>Schreiben Sie mir kurz, wo bei Ihnen Zeit verloren geht. Ich melde mich mit zwei Terminvorschlägen für das Erstgespräch.</p>
       <p><a href="mailto:marcos@marcossousa.de">marcos@marcossousa.de</a></p>
     </div>
   </div>
