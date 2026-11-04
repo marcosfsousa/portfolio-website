@@ -39,10 +39,10 @@ Each entry carries its date and issue. A changed decision is edited in place and
 ### Homepage sections (04.11.2026, #22)
 
 - The homepage keeps the two-column grid from #4 (variant D, "Marginalia"): a margin column beside a 37rem reading column, one `.row` per section. Subpages use one reading column in `main`, without the grid.
-- Each section heading, exactly as supplied („Wo sich KI lohnt“, „So fangen wir an“, „Über mich“, „Projekte“, „Kontakt“), is an `h2.side` in the margin column. It replaces the old English margin labels (Exhibit, Portfolio, Writing, Contact), so the label is the heading and the text is not repeated in the reading column. `h2.side` resets `h2`'s weight and margin, and `.side` supplies the label type.
+- Each section heading, exactly as supplied („Typische Ansatzpunkte“, „So fangen wir an“, „Über mich“, „Projekte“, „Kontakt“), is an `h2.side` in the margin column. It replaces the old English margin labels (Exhibit, Portfolio, Writing, Contact), so the label is the heading and the text is not repeated in the reading column. `h2.side` resets `h2`'s weight and margin, and `.side` supplies the label type.
 - The hero row has an empty margin cell (`.side.empty`) rather than the `h1` placed into column 2. Every row then has the same two children, so the tracks cannot disagree. The cell stays empty on purpose.
 - The hero `h1` is the hero sentence alone, in the existing `h1` style.
-- The bold subheadings in „Wo sich KI lohnt“ are `h3`. Before #22, `h3` was a smaller, grey heading for the old portfolio block. It now has ink colour and `h2`'s size, because at 1rem it was smaller than the 18.5px body text it heads.
+- The bold subheadings in „Typische Ansatzpunkte“ are `h3`. Before #22, `h3` was a smaller, grey heading for the old portfolio block. It now has ink colour and `h2`'s size, because at 1rem it was smaller than the 18.5px body text it heads.
 - Kontakt (`id="kontakt"`) is the `.end` row. `.end` no longer sets a smaller, grey type: the contact text is a call to action, not a footnote.
 - Removed with the old homepage: `.capability`, `.entry`, the old `h3` style.
 - Checked 04.11.2026 in headless Chrome at a 1243px layout width and at 390px (iframe, because headless Chrome clamps the window width). At 390px there is no horizontal scroll, the labels stack above their text, and nothing overlaps.

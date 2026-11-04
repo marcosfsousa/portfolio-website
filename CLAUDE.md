@@ -59,7 +59,7 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 ## Homepage
 
 - Hero, verbatim and alone: „Ich helfe Unternehmen, KI dort einzusetzen, wo sie sich lohnt.“
-- Flow: Hero, „Wo sich KI lohnt“, „So fangen wir an“, Über mich, Projekte, Kontakt.
+- Flow: Hero, „Typische Ansatzpunkte“, „So fangen wir an“, Über mich, Projekte, Kontakt (heading changed 04.11.2026).
 - Availability line „Remote, vor Ort nach Absprache.“ sits next to the Erstgespräch.
 
 ## Every page
