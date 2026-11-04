@@ -20,6 +20,14 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - `.end` lost its 8rem bottom padding because the footer below brings its own.
 - **Open:** below 62rem the homepage footer's hairline runs wider than the card hairlines, edge to edge on a phone. Cosmetic. Raised in the review of #24 and not fixed there.
 
+### Name in the header (04.11.2026, #22)
+
+- „Marcos Sousa“ sits on the left of the shared header and links to `/`. The nav stays as it was, on the right. Decided by Marcos so that the homepage, which `/karte` now points to, never goes live without the name: the hero `h1` is the hero sentence alone.
+- The name is outside `nav`. It is not a navigation entry, and it does not need the nav's `lang="de"`.
+- The header is a wrapping flex row: `justify-content: space-between`, `align-items: baseline`. When name and nav do not fit on one line, the nav wraps below the name. No media query is needed for that.
+- Same size and face as the nav (inherited from the header). Weight 600, the step Marcos asked for ("one weight heavier than the nav"). The serif faces in the stack have no intermediate weight (#4), so 600 is the next step up from the nav's 400.
+- Ink colour and no underline. These were my choices, not specified: they keep the name from reading as a fifth nav link.
+
 ### Project cards (03.11.2026, #19)
 
 - A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by the same hairline as `.entry`, with no box or background.

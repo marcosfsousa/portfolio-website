@@ -199,6 +199,10 @@ body > header {
 }
 body > header a { white-space: nowrap; }
 
+/* Name left, nav right; wraps to two lines when both do not fit. See docs/DECISIONS.md, Name in the header. */
+body > header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 1.5rem; }
+body > header .name { color: var(--ink); font-weight: 600; text-decoration: none; }
+
 /* Home page: header and footer match the reading column, which from 62rem starts at
    50% - 11.5rem. See docs/DECISIONS.md. */
 .home > header, .home > footer { max-width: 55rem; }
