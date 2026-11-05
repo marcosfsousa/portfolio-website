@@ -10,6 +10,9 @@ Work is tracked as GitHub issues in this repo, one issue per deliverable. Task b
 
 Netlify, deployed on push to `main`. No build step.
 
+- Every push to `main` triggers a production deploy, which costs 15 of the 300 credits a month on the Free plan. (05.11.2026)
+- Refactors and checks are done on a branch and verified on its Deploy Preview. Merge to `main` only when Marcos approves a finished batch. (05.11.2026)
+
 ## Footprint
 
 - Hand-written static HTML and CSS. `/writing/` is the pattern for new pages.
