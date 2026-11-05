@@ -109,7 +109,7 @@ Check it by pulling every rule from `site/style.css` that sets `padding*` or `ma
 
 `code` is an element selector, so it also reaches the `code` inside `pre`. Without the `pre code` reset, every line of a code block would get the inline 0.15em padding and the 500 weight. In `pre code`, `inherit` does specific work in both places. `font-size: inherit` takes `pre`'s already-computed size, where `0.84em` would multiply against it and give 0.71em. `font-weight: inherit` reaches past `code` to `pre`, which sets none, so the weight is the body's.
 
-### `pre` (#15, moved here from `style.css` 04.11.2026, #22; edited 05.11.2026, #25)
+### `pre` and `blockquote` (#15, moved here from `style.css` 04.11.2026, #22; edited 05.11.2026, #25)
 
 - `pre` scrolls itself rather than the page, so a long line never widens the viewport. Its left hairline is the site's `--hair`, like the footer and the cards.
 - No background under `pre` or `blockquote`. No downloaded code face and no highlighter library: condition 8 and the stack rule out Prism, highlight.js and every `@font-face` code face permanently.

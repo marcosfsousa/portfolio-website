@@ -35,7 +35,7 @@ code {
 }
 p { margin: 0 0 1.1rem; }
 
-/* Code blocks scroll themselves, not the page. See docs/DECISIONS.md, `pre`. */
+/* Code blocks scroll themselves, not the page. See docs/DECISIONS.md, `pre` and `blockquote`. */
 pre {
   font-family: var(--mono);
   font-size: 0.84em;
@@ -50,7 +50,7 @@ pre {
 /* See docs/DECISIONS.md, The `pre code` reset. */
 pre code { font-size: inherit; font-weight: inherit; padding-left: 0; padding-right: 0; }
 
-/* Quotation by indent, hairline and colour, no shaded block. See docs/DECISIONS.md, `pre`. */
+/* Quotation by indent, hairline and colour, no shaded block. See docs/DECISIONS.md, `pre` and `blockquote`. */
 blockquote {
   margin: 1.5rem 0;
   padding-left: 1.1rem;
