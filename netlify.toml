@@ -1,5 +1,7 @@
 [build]
   publish = "site"
+  # Exit 0 skips the build. A missing, equal or unreadable cached ref exits 1, so Netlify builds. See CLAUDE.md, Hosting.
+  ignore = '[ -n "$CACHED_COMMIT_REF" ] && [ "$CACHED_COMMIT_REF" != "$COMMIT_REF" ] && git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- site/ netlify.toml || false'
 
 [[redirects]]
   from = "/karte"

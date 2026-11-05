@@ -56,6 +56,7 @@ Each entry carries its date and issue. A changed decision is edited in place and
 ### Homepage sections (04.11.2026, #22)
 
 - The homepage keeps the two-column grid from #4 (variant D, "Marginalia"): a margin column beside a 37rem reading column, one `.row` per section. Subpages use one reading column in `main`, without the grid.
+- `.row` has `max-width: 55rem`: margin column 12rem + gap 2.5rem + reading column 37rem + side padding 2 × 1.5rem = 54.5rem, rounded up (#4, moved here from `style.css` 05.11.2026, #25).
 - Each section heading, exactly as supplied („Typische Ansatzpunkte“, „So fangen wir an“, „Über mich“, „Projekte“, „Kontakt“), is an `h2.side` in the margin column. It replaces the old English margin labels (Exhibit, Portfolio, Writing, Contact), so the label is the heading and the text is not repeated in the reading column. `h2.side` resets `h2`'s weight and margin, and `.side` supplies the label type.
 - The hero row has an empty margin cell (`.side.empty`) rather than the `h1` placed into column 2. Every row then has the same two children, so the tracks cannot disagree. The cell stays empty on purpose.
 - The hero `h1` is the hero sentence alone, in the existing `h1` style.
@@ -67,6 +68,23 @@ Each entry carries its date and issue. A changed decision is edited in place and
 ### No `.tail` (03.11.2026)
 
 `.block.tail` styled the homepage row that linked to the German PDF. The PDF and that row were removed (see `CLAUDE.md`, Structure), and the rule went with them.
+
+## Type
+
+### Measure: 37rem (#4, moved here from `style.css` 05.11.2026, #25)
+
+The reading column is 37rem wide. It is the only width where every face in the serif stack lands inside 65–75 characters per line at 18.5px: Sitka Text 67, Cambria 74, Georgia 71. Measured in the browser: 67.3.
+
+### Inline `code` weight (#15, moved here from `style.css` 05.11.2026, #25)
+
+- Inline `code` is set apart from the prose by spacing and weight, never by a tinted box. The write-ups use inline code densely, often several spans in one paragraph. At that density a background reads as noise across the page rather than as emphasis inside a sentence.
+- A background would also break. An inline span that wraps gets its padding on the first and last fragment only, so a background renders as a visibly broken box, where padding alone is invisible.
+- What `font-weight: 500` returns was measured, not predicted, because the prediction was wrong. On the Windows desktop it was verified on, the stack reaches "Cascadia Mono", which precedes Consolas and ships with Windows Terminal. There a requested 500 renders as the family's SemiBold, one step heavier than the value names. Two mechanisms agree: DevTools reports the face on the Keycloak post's first paragraph as CascadiaMonoRoman-SemiBold, and a canvas ink test gives 500 and 600 byte-identical coverage, both about 17% above 400.
+- The CSS font-matching rules predict the opposite. For a requested 500 with no 500 in the family, matching checks 500 and then descends, which should reach Regular 400. Chrome does not do that for this local family. Do not reason about the rendered weight from the algorithm here; look at it.
+- Where Cascadia Mono is absent the stack falls to Consolas, which has Regular and Bold only. That case is predicted to land on 400 and degrade to padding alone. It stays a prediction: nothing has been rendered on such a machine.
+- On a handset neither family exists and the stack falls through to the generic monospace, a third case. The Keycloak post was read there in Chrome and Firefox with nothing flagrant seen. The face was not identified.
+- 500 stays, decided against the rendering rather than against the value's name: the result of 500 was looked at on both surfaces, the desktop and a handset, and accepted. Do not go above it. Asked for 500, this stack went up a step rather than down, so a request above 500 has further to climb, with a real Bold at the top of both families. Full bold on inline code this dense is heavier than the prose it sits in.
+- #15 gave "600+ synthesises" as the reason. Synthesis is the wrong worry for a family that ships a real Bold: the face would be genuine and still too heavy. The ruling stands; only its reason was replaced.
 
 ## Padding collisions
 
@@ -91,11 +109,11 @@ Check it by pulling every rule from `site/style.css` that sets `padding*` or `ma
 
 `code` is an element selector, so it also reaches the `code` inside `pre`. Without the `pre code` reset, every line of a code block would get the inline 0.15em padding and the 500 weight. In `pre code`, `inherit` does specific work in both places. `font-size: inherit` takes `pre`'s already-computed size, where `0.84em` would multiply against it and give 0.71em. `font-weight: inherit` reaches past `code` to `pre`, which sets none, so the weight is the body's.
 
-### `pre` (#15, moved here from `style.css` 04.11.2026, #22)
+### `pre` and `blockquote` (#15, moved here from `style.css` 04.11.2026, #22; edited 05.11.2026, #25)
 
 - `pre` scrolls itself rather than the page, so a long line never widens the viewport. Its left hairline is the site's `--hair`, like the footer and the cards.
 - No background under `pre` or `blockquote`. No downloaded code face and no highlighter library: condition 8 and the stack rule out Prism, highlight.js and every `@font-face` code face permanently.
-- Both were written for the write-ups before any page used them. The Keycloak post now has one `pre` and one `blockquote`.
+- Both were written for the write-ups before any page used them.
 
 ## Mobile
 
