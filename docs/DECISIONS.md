@@ -8,8 +8,11 @@ Each entry carries its date and issue. A changed decision is edited in place and
 
 ### Shared header and footer (03.11.2026, #18)
 
-- Every page carries byte-identical `<header>` and `<footer>` markup. Nav and footer both carry `lang="de"` on every page. It is needed on the English pages and does nothing on the German ones, so the markup can stay identical.
-- No `aria-current` on the nav: it would make the markup differ per page.
+- Every page carries byte-identical `<footer>` markup. The `<header>` markup is the same on every page with a nav, with two exceptions (03.11.2026, #18; changed 05.11.2026, #36):
+  - The homepage nav omits „Start“. There it led to the page itself, as the name link „Marcos Sousa“ beside it already does.
+  - The nav link to the current page carries `aria-current="page"`: „Portfolio“ on `/portfolio/`, „Artikel“ on `/writing/`. No other page has a nav link to itself. On project pages and articles those links lead to the parent page, and „Kontakt“ on the homepage is a fragment of the page. There is no visual style for it.
+- Nav and footer both carry `lang="de"` on every page. It is needed on the English pages and does nothing on the German ones, so it is not one of the header's per-page differences.
+- `aria-current` on the nav: none at first, because it would have made the markup differ per page (03.11.2026, #18). Added for the current page, as above (05.11.2026, #36).
 - The homepage aligns header and footer with its reading column through `body.home`, not through different markup.
   - Below 62rem the grid is one column, 55rem wide with 1.5rem side padding, so header and footer take `max-width: 55rem`.
   - From 62rem the reading column starts at 50% − 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap) = **50% − 11.5rem**. There the box becomes the column exactly: 37rem wide, no side padding. That puts the footer's hairline on the same span as the hairlines between the homepage cards (`.entry` before 04.11.2026, #22). Keeping the subpage padding would have needed the box 1.5rem further left to line the text up, and its hairline would then start 1.5rem left of theirs.
@@ -26,12 +29,12 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - The name is outside `nav`. It is not a navigation entry, and it does not need the nav's `lang="de"`.
 - The header is a wrapping flex row: `justify-content: space-between`, `align-items: baseline`. When name and nav do not fit on one line, the nav wraps below the name. No media query is needed for that.
 - Same size and face as the nav (inherited from the header). Weight 600, the step Marcos asked for ("one weight heavier than the nav"). The serif faces in the stack have no intermediate weight (#4), so 600 is the next step up from the nav's 400.
-- Ink colour and no underline. These were my choices, not specified: they keep the name from reading as a fifth nav link.
+- Ink colour and no underline. These were my choices, not specified: they keep the name from reading as another nav link ("a fifth nav link" until 05.11.2026, #36).
 
 ### Campaign pages: header without nav (05.11.2026, #29)
 
 - `/ki-check/`, `/ki-check/danke/` and `/ki-check/bestaetigt/` carry the shared `<header>` with the name link „Marcos Sousa“ → `/` only, and no `<nav>`. Decided by Marcos. CLAUDE.md asks for the same header on every page and for no main navigation on campaign pages. The name keeps the page attributable; dropping the nav keeps it to one goal.
-- These pages are therefore the one exception to byte-identical header markup (Shared header and footer, above). The footer stays byte-identical.
+- These pages are therefore an exception to the shared header markup (Shared header and footer, above), alongside the homepage nav and `aria-current` (changed 05.11.2026, #36). The footer stays byte-identical.
 
 ### Opt-in form (05.11.2026, #29)
 
