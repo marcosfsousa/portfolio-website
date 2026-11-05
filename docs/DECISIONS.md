@@ -38,6 +38,8 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - The form on `/ki-check/` is our own markup carrying the field names, hidden inputs and `action` of Brevo's „Simple HTML“ embed. None of Brevo's classes, inline styles, SVG or `sib-styles.css` (CLAUDE.md, Footprint).
 - The honeypot `email_address_check` is `display: none`. Brevo's own stylesheet did this through `.input--hidden`; without it, the field would show.
   - The rule sits after the text-field rule. Both are one class, one element and one attribute, so the later one wins. Placed before it, the field rule's `display: block` showed the honeypot: seen in the first render, 05.11.2026.
+- The honeypot also carries `tabindex="-1"` and `autocomplete="off"`, so that if the stylesheet fails to load, keyboard users and autofill skip it (review of #31).
+- The „Datenschutzerklärung“ link in the consent label opens in a new tab (`target="_blank" rel="noopener"`), so reading it mid-form does not lose the input (review of #31).
 - Labels sit above the fields, at full column width. Fields have a 1px `--quiet` border and the page background, so they hold in both colour schemes without new tokens.
 - Each checkbox is a two-column grid row, box and label, `align-items: baseline`. The long consent text then wraps under itself, not under the box.
 - The button inverts ink and background. It is the page's one goal, so it is the one filled element on the site.
