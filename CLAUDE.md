@@ -68,7 +68,7 @@ Campaign pages (e.g. `/ki-check/`) are standalone: no main navigation, one goal,
 
 ## Every page
 
-- Same header and footer on every page. The footer links Impressum and Datenschutzerklärung.
+- Same header and footer on every page, except: the homepage nav omits “Start”, and the nav link to the current page carries aria-current="page". Other exceptions and their reasons: docs/DECISIONS.md. (05.11.2026) The footer links Impressum and Datenschutzerklärung.
 - A change to the header or footer is made on every page in the same change.
 - Before every push: check all pages for header, footer, both legal links, `lang`, and „(englisch)“ markers.
 - After every production deploy: check the served HTML of every page on marcossousa.de. It contains no `<script>` tags and nothing injected by Netlify. Checking the repo is not enough. (03.11.2026)
