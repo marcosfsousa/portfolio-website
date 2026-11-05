@@ -28,6 +28,21 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - Same size and face as the nav (inherited from the header). Weight 600, the step Marcos asked for ("one weight heavier than the nav"). The serif faces in the stack have no intermediate weight (#4), so 600 is the next step up from the nav's 400.
 - Ink colour and no underline. These were my choices, not specified: they keep the name from reading as a fifth nav link.
 
+### Campaign pages: header without nav (05.11.2026, #29)
+
+- `/ki-check/`, `/ki-check/danke/` and `/ki-check/bestaetigt/` carry the shared `<header>` with the name link „Marcos Sousa“ → `/` only, and no `<nav>`. Decided by Marcos. CLAUDE.md asks for the same header on every page and for no main navigation on campaign pages. The name keeps the page attributable; dropping the nav keeps it to one goal.
+- These pages are therefore the one exception to byte-identical header markup (Shared header and footer, above). The footer stays byte-identical.
+
+### Opt-in form (05.11.2026, #29)
+
+- The form on `/ki-check/` is our own markup carrying the field names, hidden inputs and `action` of Brevo's „Simple HTML“ embed. None of Brevo's classes, inline styles, SVG or `sib-styles.css` (CLAUDE.md, Footprint).
+- The honeypot `email_address_check` is `display: none`. Brevo's own stylesheet did this through `.input--hidden`; without it, the field would show.
+  - The rule sits after the text-field rule. Both are one class, one element and one attribute, so the later one wins. Placed before it, the field rule's `display: block` showed the honeypot: seen in the first render, 05.11.2026.
+- Labels sit above the fields, at full column width. Fields have a 1px `--quiet` border and the page background, so they hold in both colour schemes without new tokens.
+- Each checkbox is a two-column grid row, box and label, `align-items: baseline`. The long consent text then wraps under itself, not under the box.
+- The button inverts ink and background. It is the page's one goal, so it is the one filled element on the site.
+- `autocomplete` carries the standard tokens (`given-name`, `family-name`, `organization`, `email`, `tel`); Brevo's embed had `off`.
+
 ### Project cards (03.11.2026, #19)
 
 - A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by a 1px hairline in `--hair`, as the footer is, with no box or background.

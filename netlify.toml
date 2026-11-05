@@ -10,3 +10,8 @@
   from = "/files/portfolio-referenzprojekte-de.pdf"
   to = "/portfolio/"
   status = 301
+
+[[headers]]
+  for = "/ki-check/ki-checkliste.pdf"
+  [headers.values]
+    X-Robots-Tag = "noindex"
