@@ -205,6 +205,38 @@ body > header .name { color: var(--ink); font-weight: 600; text-decoration: none
   }
 }
 
+/* ---- opt-in form: /ki-check/ ------------------------------------------- */
+
+.optin label { display: block; }
+.optin input[type="text"], .optin input[type="email"], .optin input[type="tel"] {
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--quiet);
+  border-radius: 0;
+  padding: 0.35rem 0.5rem;
+}
+
+/* Brevo's honeypot. Stays after the rule above, which has the same specificity. See docs/DECISIONS.md, Opt-in form. */
+.optin input[name="email_address_check"] { display: none; }
+
+/* Checkbox beside its label, wrapped text aligned with the first line. See docs/DECISIONS.md, Opt-in form. */
+.optin .check { display: grid; grid-template-columns: auto 1fr; column-gap: 0.6rem; align-items: baseline; }
+.optin .check input { margin: 0; }
+
+.optin button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0.45rem 1.1rem;
+  cursor: pointer;
+}
+
 /* ---- mobile: stays last in the file ------------------------------------ */
 
 /* Phone widths. See docs/DECISIONS.md, Mobile. */
