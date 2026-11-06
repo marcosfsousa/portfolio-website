@@ -21,7 +21,7 @@ Each entry carries its date and issue. A changed decision is edited in place and
   - `.home > header` outranks `body > header` on specificity, so source order does not matter between them.
 - Spacing with the nav. `.top` and `main` top padding went from 3.5rem to 2.5rem, and on mobile from 2.5rem to 2rem. The nav is its top padding plus one 0.9rem line at line-height 1.7 (≈24.5px). That's ≈48.5px on desktop (1.5rem padding) and ≈40.5px on mobile (1rem). So the first heading sits about 2rem (≈32px) lower than before on both. That was kept on purpose (option (a) in the review of #24).
 - `.end` lost its 8rem bottom padding because the footer below brings its own.
-- **Open:** below 62rem the homepage footer's hairline runs wider than the card hairlines, edge to edge on a phone. Cosmetic. Raised in the review of #24 and not fixed there.
+- **Open:** on `/portfolio/` the footer's hairline runs 1.5rem wider on each side than the card hairlines, at every width, and edge to edge on a phone. The footer's side padding sits inside its border; the cards sit inside `main`'s padding. Cosmetic. Raised in the review of #24 for the homepage cards and not fixed there. The homepage has no cards since #37, so the item now refers to `/portfolio/` (changed 06.11.2026, #37). Measured on the Deploy Preview of #39 in headless Chrome: footer hairline 344–936 against cards 368–912 at 1280px, 0–390 against 24–366 at 390px.
 
 ### Name in the header (04.11.2026, #22)
 
