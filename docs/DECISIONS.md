@@ -15,13 +15,13 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - `aria-current` on the nav: none at first, because it would have made the markup differ per page (03.11.2026, #18). Added for the current page, as above (05.11.2026, #36).
 - The homepage aligns header and footer with its reading column through `body.home`, not through different markup.
   - Below 62rem the grid is one column, 55rem wide with 1.5rem side padding, so header and footer take `max-width: 55rem`.
-  - From 62rem the reading column starts at 50% − 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap) = **50% − 11.5rem**. There the box becomes the column exactly: 37rem wide, no side padding. That puts the footer's hairline on the same span as the hairlines between the homepage cards (`.entry` before 04.11.2026, #22). Keeping the subpage padding would have needed the box 1.5rem further left to line the text up, and its hairline would then start 1.5rem left of theirs.
+  - From 62rem the reading column starts at 50% − 27.5rem (half the row) + 1.5rem (row gutter) + 14.5rem (margin column + gap) = **50% − 11.5rem**. There the box becomes the column exactly: 37rem wide, no side padding. That puts the footer's text and hairline on the reading column's span (changed 06.11.2026, #37; until then the reason was the hairlines between the homepage cards). Keeping the subpage padding would have needed the box 1.5rem further left to line the text up, and its hairline would then start 1.5rem left of the column.
   - Measured at 1280px in headless Chrome: nav, h1, footer text and all hairlines start at x=456, and the hairlines span 456–1047.
   - Re-measured 04.11.2026 (#22) in headless Chrome at a 1243px layout width: nav, hero `h1`, every section's text column, the cards and the footer all start at x=438 (= 50% − 11.5rem) and end at 1030.
   - `.home > header` outranks `body > header` on specificity, so source order does not matter between them.
 - Spacing with the nav. `.top` and `main` top padding went from 3.5rem to 2.5rem, and on mobile from 2.5rem to 2rem. The nav is its top padding plus one 0.9rem line at line-height 1.7 (≈24.5px). That's ≈48.5px on desktop (1.5rem padding) and ≈40.5px on mobile (1rem). So the first heading sits about 2rem (≈32px) lower than before on both. That was kept on purpose (option (a) in the review of #24).
 - `.end` lost its 8rem bottom padding because the footer below brings its own.
-- **Open:** below 62rem the homepage footer's hairline runs wider than the card hairlines, edge to edge on a phone. Cosmetic. Raised in the review of #24 and not fixed there.
+- **Open:** on `/portfolio/` the footer's hairline runs 1.5rem wider on each side than the card hairlines, at every width, and edge to edge on a phone. The footer's side padding sits inside its border; the cards sit inside `main`'s padding. Cosmetic. Raised in the review of #24 for the homepage cards and not fixed there. The homepage has no cards since #37, so the item now refers to `/portfolio/` (changed 06.11.2026, #37). Measured on the Deploy Preview of #39 in headless Chrome: footer hairline 344–936 against cards 368–912 at 1280px, 0–390 against 24–366 at 390px.
 
 ### Name in the header (04.11.2026, #22)
 
@@ -53,8 +53,8 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by a 1px hairline in `--hair`, as the footer is, with no box or background.
 - It is a new class rather than `.entry`. `.entry p` dropped paragraph margins, which suited a single sentence, but a card has several paragraphs and needs the normal paragraph rhythm. `.entry` was removed with the old homepage (04.11.2026, #22).
 - `.card h2` resets `main h2`'s top margin, because the card's own top padding already separates it from the card above. `.card h2` outranks `main h2` on specificity.
-- The class works in both layouts. The homepage „Projekte“ section reuses it (04.11.2026, #22). There the card title is an `h3`, because the section heading is the `h2`. `h3` has the same size as `h2` (1.14rem), so a card looks the same on both pages.
-- On the homepage the first card drops its top padding (`.col > .card:first-child`), so its title lines up with the „Projekte“ label beside it.
+- Only `/portfolio/` uses cards (changed 06.11.2026, #37). The homepage „Projekte“ section reused the class from 04.11.2026 (#22) and now holds one line linking to `/portfolio/`, so the project texts exist only there.
+- Removed with the homepage cards (06.11.2026, #37): `.card h3`, the homepage card title, and `.col > .card:first-child`, which dropped the first card's top padding to line its title up with the „Projekte“ label.
 
 ### Homepage sections (04.11.2026, #22)
 

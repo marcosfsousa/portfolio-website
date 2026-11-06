@@ -121,9 +121,8 @@ main h1 + h2 { margin-top: 1.6rem; }
 
 /* See docs/DECISIONS.md, Project cards. */
 .card { padding-top: 1.1rem; padding-bottom: 1.1rem; }
-.col > .card:first-child { padding-top: 0; }
 .card + .card { border-top: 1px solid var(--hair); }
-.card h2, .card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.card h2 { margin-top: 0; margin-bottom: 0.5rem; }
 .card p:last-child { margin-bottom: 0; }
 
 body > footer {
