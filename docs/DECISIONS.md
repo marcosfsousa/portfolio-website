@@ -48,6 +48,14 @@ Each entry carries its date and issue. A changed decision is edited in place and
 - The button inverts ink and background. It is the page's one goal, so it is the one filled element on the site.
 - `autocomplete` carries the standard tokens (`given-name`, `family-name`, `organization`, `email`, `tel`); Brevo's embed had `off`.
 
+### Open Graph only on `/ki-check/` (06.11.2026, #40)
+
+- `/ki-check/` is the one page with Open Graph and `twitter:card` tags. It is the link shared on LinkedIn, in the profile's Featured section and in the first comment of the campaign posts, and without `og:image` LinkedIn showed it with no image. No other page is shared that way, so no other page has the tags.
+- The tags make visitors' browsers request nothing. Only LinkedIn's crawler fetches the image, from our own domain, so the Datenschutzerklärung and the no-external-resources rule are untouched (CLAUDE.md, Footprint).
+- The image, `site/ki-check/ki-check-og.png` (1200×627), is a screenshot of the top of the page in the dark colour scheme: name, headline and first paragraph, no form. Supplied by Marcos and committed unchanged.
+- Because it is a screenshot, it must be replaced whenever the name, the headline or the first paragraph of `/ki-check/` changes. Otherwise LinkedIn shows text the page no longer has. Retake it in the same colour scheme and at the same size.
+- After replacing the image, re-scrape https://marcossousa.de/ki-check/ in LinkedIn's Post Inspector. LinkedIn caches previews and does not pick up a new image under the same filename on its own.
+
 ### Project cards (03.11.2026, #19)
 
 - A card is a `div.card`: an `h2` title, its paragraphs, then the „Details (englisch)“ link. Cards are separated by a 1px hairline in `--hair`, as the footer is, with no box or background.
